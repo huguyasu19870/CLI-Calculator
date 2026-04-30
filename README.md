@@ -3,6 +3,7 @@ Order-of-operation compliant Calculator that uses Comman-line Interface to inter
 
 ## Roadmap
 Currently, I have six versions planned;
+
 -- Version 1 (released)
 Version 1 can calculate in integer, but not decimal.
 Version 1 can handle exponent, factorial, multiplication, division, addition, subtraction, and comparison.
