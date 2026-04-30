@@ -72,6 +72,7 @@ std::unordered_map<unsigned long long int, std::string> inputOrganization::calcu
             } else {
                 lastLetter = input[i-1];
             }
+            //I have no idea when I have programmed this variable, but origially (before fixing for github) it was apparently tempEq[something], which is just why.
             if(((lastLetter >= 48) && (lastLetter <= 57))|| (lastLetter == 46)){
                 //If last letter is number or period, and current letter is not, then add to map.
                 if((currentLetter != 46) && (((currentLetter < 48) || (currentLetter > 57)))){
@@ -174,6 +175,8 @@ std::unordered_map<unsigned long long int, std::string> inputOrganization::calcu
             result.insert({locationKey, tempEq});
             break;
         } else if(i == input.length()-1){
+            //Funny thing is that I was stuck in debug because I didn't write this if.
+            //Apperantly, I have thought all about interaction between numbers and mathematical operators, but not when string ends.
             result.insert({locationKey, tempEq});
         }
     }
