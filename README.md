@@ -1,5 +1,5 @@
 # CLI-Calculator
-Order-of-operation compliant Calculator that uses Comman-line Interface to interact with its users.
+Order-of-operation compliant Calculator that uses Command-line Interface to interact with its users.
 
 ## Roadmap
 Currently, I have six versions planned;
