@@ -8,7 +8,7 @@ Currently, I have six versions planned;
 
 Version 1 can calculate in integer, but not decimal.
 Version 1 can handle exponent, factorial, multiplication, division, addition, subtraction, and comparison.
-It is also important to note that formula/equation must be correct, otherwise it may output incorrect result.
+It is also important to note that formula/equation must be correct, otherwise it may output incorrect result or break the program.
 
 
 -- Version 2
