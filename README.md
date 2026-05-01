@@ -19,7 +19,7 @@ It is important to note that mistakenly used division instead of multiplication 
 
 -- Version 3
 
-In Version 3, output will support decimal value.
+In Version 3, calculation will support decimal value.
 
 
 -- Version 4
