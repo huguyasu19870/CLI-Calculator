@@ -12,13 +12,23 @@ std::string inputOrganization::inputCleaner(std::string input){
         //V1: If letter of input[i] is number or symbol used in mathematics, then add them into output string.
         switch(currentLetter){
         case 33:
-        //case 40:
-        //case 41:
         case 42:
         case 43:
         case 45:
         case 46:
         case 47:
+        case 60:
+        case 61:
+        case 62:
+        case 94:
+        case 126:
+        //case 40:
+        //case 41:
+        //case 91:
+        //case 93:
+        //case 123:
+        //case 124:
+        //case 125:
         case 48:
         case 49:
         case 50:
@@ -29,16 +39,6 @@ std::string inputOrganization::inputCleaner(std::string input){
         case 55:
         case 56:
         case 57:
-        case 60:
-        case 61:
-        case 62:
-        //case 91:
-        //case 93:
-        case 94:
-        //case 123:
-        //case 124:
-        //case 125:
-        case 126:
             equationOutput += currentLetter;
             break;
         }
