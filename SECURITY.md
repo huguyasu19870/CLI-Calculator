@@ -3,8 +3,6 @@
 | Version | Supported          |
 | ------- | ------------------ |
 | 1       | :white_check_mark: |
-| ------- | ------------------ |
-|         |                    |
 
 ## Preferred Communication Language
 
