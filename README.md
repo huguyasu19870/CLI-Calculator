@@ -14,7 +14,8 @@ It is also important to note that formula/equation must be correct, otherwise it
 -- Version 2
 
 In Version 2, minor mistake in formula would be corrected through additional programming.
-It is important to note that mistakenly used division instead of multiplication would not be corrected, because it is mathematically correct, while it is incorrect intention wise.
+
+It is important to note that actions like mistakenly used division instead of multiplication would not be corrected, because it is mathematically correct, while it is incorrect intention wise.
 
 
 -- Version 3
