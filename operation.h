@@ -1,5 +1,7 @@
 #ifndef OPERATION_H_INCLUDED
 #define OPERATION_H_INCLUDED
+#include <vector>
+#include <string>
 
 class SimpleOperation{
 public:
@@ -11,8 +13,8 @@ public:
 };
 class TypeConvert{
 public:
-    int letterToInt(std::string &input);
-    int letterToInt(char &input);
+    int letterToInt(const std::string &input);
+    int letterToInt(const char &input);
 };
 
 #endif // OPERATION_H_INCLUDED
