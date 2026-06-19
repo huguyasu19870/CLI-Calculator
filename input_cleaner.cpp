@@ -53,6 +53,7 @@ std::string inputOrganization::inputCleaner(std::string &input){
 //Do I need this to be unordered map?
 std::unordered_map<unsigned long long int, std::string> inputOrganization::calculationSpecifier(std::string &input){
     std::unordered_map<unsigned long long int, std::string> result;
+    result.reserve((static_cast<int>(input.length()/2)));
     std::string tempEq = "";
     char currentLetter;
     char lastLetter;
@@ -60,6 +61,7 @@ std::unordered_map<unsigned long long int, std::string> inputOrganization::calcu
     bool hasComparison = false;
     for(unsigned long long int i = 0; i < input.length(); i++){
         if(input.length() != 0){
+            tempEq.reserve(7);
             currentLetter = input[i];
             if(i == 0){
                 lastLetter = 0;
