@@ -128,4 +128,9 @@ void calcTest::finalTestValidation(){
         std::cout << "Test result red." << std::endl;
         std::cout << "Error trippied at " << errorLoc << std::endl;
     }
+    calcTest::setFinishClock();
+    auto start = calcTest::getStartClock();
+    auto finish = calcTest::getFinishClock();
+    double elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(finish-start).count();
+    std::cout << "Test Duration is " << elapsedTime << "ms." << std::endl;
 }
