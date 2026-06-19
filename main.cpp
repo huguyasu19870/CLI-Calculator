@@ -35,6 +35,7 @@ reInput:
         shouldEnd = true;
         return 0;
     } else if((inputValue == "test") || (inputValue == "Test")){
+        calcTest.setStartClock();
         testMode = true;
         goto testInit;
     }
