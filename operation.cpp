@@ -50,28 +50,8 @@ int TypeConvert::letterToInt(const std::string &input){
     }
 }
 int TypeConvert::letterToInt(const char &i){
-    int result;
-    if(i == '0'){
-        result = 0;
-    } else if(i == '1'){
-        result = 1;
-    } else if(i == '2'){
-        result = 2;
-    } else if(i == '3'){
-        result = 3;
-    } else if(i == '4'){
-        result = 4;
-    } else if(i == '5'){
-        result = 5;
-    } else if(i == '6'){
-        result = 6;
-    } else if(i == '7'){
-        result = 7;
-    } else if(i == '8'){
-        result = 8;
-    } else if(i == '9'){
-        result = 9;
-    } else {
+    int result = static_cast<int>(i - '0');
+    if((result < 48) && (result > 57)){
         result = -1;
     }
     return result;
