@@ -27,15 +27,12 @@ std::vector<std::string> CalculationLogic::calcLogic(std::vector<std::string> in
     isFirstHalf = calcStep < compLoc;
     while(!isDoneProcessing){
     startCalc:
-        calcOps = CalculationLogic::getCalcOps();
         //I have tried to do smart thing and minimize the amount of calculation by doing some circus routine.
         //I was not that smart or knowledgeable, so I am brute-forcing the result out of this.
 
         //std::cout << "[Debug] function calcLogic's variable calcOps is : " << calcOps << std::endl;
         //std::cout << "[Debug] function calcLogic's variable calcStep is : " << calcStep << std::endl;
-        try {
-            currentCalc = input.at(calcStep);
-        } catch(std::out_of_range &e){
+        if(calcStep >= input.size()){
             /*
             std::cout << "[Debug] function calcLogic's variable calcStep at oor is : " << calcStep << std::endl;
             std::cout << "[Debug] function calcLogic's variable calcOps at oor is : " << calcOps << std::endl;
@@ -43,7 +40,10 @@ std::vector<std::string> CalculationLogic::calcLogic(std::vector<std::string> in
             */
             break;
         }
+        currentCalc = input.at(calcStep);
+        #ifdef DEBUG
         std::cout << "[Debug] function calcLogic's variable currentCalc is: " << currentCalc << std::endl;
+        #endif // DEBUG
         if((currentCalc == "!") && (calcOps == 0)){
             calcTemp = SimpleOperation.factorialOp(TypeConvert.letterToInt(input[calcStep-1]));
             input[calcStep-1] = std::to_string(calcTemp);
@@ -111,15 +111,19 @@ std::vector<std::string> CalculationLogic::calcLogic(std::vector<std::string> in
         //std::cout << "[Debug] function calcLogic's variable compLoc is: " << compLoc<< std::endl;
         if(isFirstHalf && (calcStep == compLoc) && (calcOps < 3)){
             calcStep = 0;
+            calcOps++;
             CalculationLogic::incrementCalcOps();
         } else if(isFirstHalf && (calcStep == compLoc) && (calcOps == 3)){
             isFirstHalf = false;
+            calcOps = 0;
             CalculationLogic::setCalcOps(0);
         } else if((!isFirstHalf) && (calcStep >= (input.size()-1)) && (calcOps < 3)){
             calcStep = compLoc;
+            calcOps++;
             CalculationLogic::incrementCalcOps();
         } else if((!isFirstHalf) && (calcStep >= (input.size()-1)) && (calcOps == 3)){
             isDoneProcessing = true;
+            calcOps = 0;
             CalculationLogic::setCalcOps(0);
         }
         if(calcStep >= input.size()){
@@ -134,13 +138,13 @@ std::vector<std::string> CalculationLogic::calcLogic(std::vector<std::string> in
             break;
         }
     }
-
+    #ifdef DEBUG
     std::cout << "[Debug] function calcLogic's first value of output is: " << input[0] << std::endl;
     if(input.size() >= 3){
         std::cout << "[Debug] function calcLogic's second value of output is: " << input[1] << std::endl;
         std::cout << "[Debug] function calcLogic's third value of output is: " << input[2] << std::endl;
     }
-
+    #endif // DEBUG
     return input;
 }
 
