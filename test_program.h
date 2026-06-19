@@ -2,6 +2,7 @@
 #define TEST_PROGRAM_H_INCLUDED
 #include <string>
 #include <array>
+#include <chrono>
 
 class calcTest{
 public:
@@ -64,6 +65,18 @@ public:
     void insertSimpleResultArray(bool resultInput, int index){
         simpleResultArray[index] = resultInput;
     }
+    void setStartClock(){
+        startTime = std::chrono::system_clock::now();
+    }
+    void setFinishClock(){
+        finishTime = std::chrono::system_clock::now();
+    }
+    std::chrono::system_clock::time_point getStartClock(){
+        return startTime;
+    }
+    std::chrono::system_clock::time_point getFinishClock(){
+        return finishTime;
+    }
 private:
     int testNum = 0;
     int testOps = 0;
@@ -83,6 +96,8 @@ private:
     int testType = 0;
     std::array<bool, 5> simpleResultTempArray = {0, 0, 0, 0, 0};
     std::array<bool, 8> simpleResultArray = {0, 0, 0, 0, 0, 0, 0, 0};
+    inline static std::chrono::system_clock::time_point startTime;
+    inline static std::chrono::system_clock::time_point finishTime;
 };
 
 #endif // TEST_PROGRAM_H_INCLUDED
