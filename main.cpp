@@ -6,6 +6,7 @@
 #include <chrono>
 #include <array>
 #include <algorithm>
+#include <cstddef>
 #include "main.h"
 #include "operation.h"
 #include "input_cleaner.h"
@@ -64,7 +65,7 @@ testInit:
         }
         inputValue = testArray[testPhase];
     }
-    std::unordered_map<unsigned long long int, std::string> calcFlg = inputOrganization.calculationSpecifier(inputValue);
+    std::unordered_map<std::size_t, std::string> calcFlg = inputOrganization.calculationSpecifier(inputValue);
 //    std::unordered_map<unsigned long long int, unsigned long long int> location = inputOrganization.getOopLocation();
 //    unsigned long long int delCount = 0;
     std::vector<std::string> calcFlg2 = inputOrganization.returnOrderedFormula(calcFlg);
