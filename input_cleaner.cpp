@@ -3,12 +3,13 @@
 #include <vector>
 #include <climits>
 #include <iostream>
+#include <cstddef>
 #include "input_cleaner.h"
 #include "operation.h"
 
 std::string inputOrganization::inputCleaner(std::string &input){
     std::string equationOutput = "";
-    for(unsigned long long int i = 0; i < input.length(); i++){
+    for(std::size_t i = 0; i < input.length(); i++){
         char currentLetter = input[i];
         //V1: If letter of input[i] is number or symbol used in mathematics, then add them into output string.
         switch(currentLetter){
@@ -43,23 +44,20 @@ std::string inputOrganization::inputCleaner(std::string &input){
             equationOutput += currentLetter;
             break;
         }
-        if(i == ULLONG_MAX){
-            break;
-        }
     }
     return equationOutput;
 }
 
 //Do I need this to be unordered map?
-std::unordered_map<unsigned long long int, std::string> inputOrganization::calculationSpecifier(std::string &input){
-    std::unordered_map<unsigned long long int, std::string> result;
+std::unordered_map<std::size_t, std::string> inputOrganization::calculationSpecifier(std::string &input){
+    std::unordered_map<std::size_t, std::string> result;
     result.reserve((static_cast<int>(input.length()/2)));
     std::string tempEq = "";
     char currentLetter;
     char lastLetter;
-    unsigned long long int locationKey = 0;
+    std::size_t locationKey = 0;
     bool hasComparison = false;
-    for(unsigned long long int i = 0; i < input.length(); i++){
+    for(std::size_t i = 0; i < input.length(); i++){
         if(input.length() != 0){
             tempEq.reserve(7);
             currentLetter = input[i];
@@ -143,10 +141,7 @@ std::unordered_map<unsigned long long int, std::string> inputOrganization::calcu
             }
         }
         tempEq += currentLetter;
-        if(i == ULLONG_MAX){
-            result.insert({locationKey, tempEq});
-            break;
-        } else if(i == input.length()-1){
+        if(i == input.length()-1){
             //Funny thing is that I was stuck in debug because I didn't write this if.
             //Apperantly, I have thought all about interaction between numbers and mathematical operators, but not when string ends.
             result.insert({locationKey, tempEq});
@@ -164,10 +159,10 @@ std::unordered_map<unsigned long long int, std::string> inputOrganization::calcu
     return result;
 }
 
-std::vector<std::string> inputOrganization::returnOrderedFormula(std::unordered_map<unsigned long long int, std::string> &input){
+std::vector<std::string> inputOrganization::returnOrderedFormula(std::unordered_map<std::size_t, std::string> &input){
     std::vector<std::string> calcFlg2;
     calcFlg2.reserve(input.size());
-    for(unsigned long long int i = 0; i < input.size(); i++){
+    for(std::size_t i = 0; i < input.size(); i++){
         std::string temp = input.at(i);
         int tempLen = temp.length();
         if(temp[0] == '*'){
@@ -204,9 +199,6 @@ std::vector<std::string> inputOrganization::returnOrderedFormula(std::unordered_
             temp = "==";
         }
         calcFlg2.push_back(temp);
-        if(i == ULLONG_MAX){
-            break;
-        }
     }
     return calcFlg2;
 }
