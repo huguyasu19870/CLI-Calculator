@@ -3,13 +3,14 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include <cstddef>
 
 class inputOrganization{
 public:
     std::string inputCleaner(std::string &input);
-    std::unordered_map<unsigned long long int, std::string> calculationSpecifier(std::string &input);
-    std::vector<std::vector<unsigned long long int> > operationLocator(std::string input);
-    std::vector<std::string> returnOrderedFormula(std::unordered_map<unsigned long long int, std::string> &input);
+    std::unordered_map<std::size_t, std::string> calculationSpecifier(std::string &input);
+    std::vector<std::vector<std::size_t> > operationLocator(std::string input);
+    std::vector<std::string> returnOrderedFormula(std::unordered_map<std::size_t, std::string> &input);
     /*
     std::unordered_map<unsigned long long int, unsigned long long int> getOopLocation(){
         return const &oopLocation;
