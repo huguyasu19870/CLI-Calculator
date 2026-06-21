@@ -3,149 +3,180 @@
 #include <vector>
 #include <climits>
 #include <iostream>
+#include <cstddef>
+#include <algorithm>
 #include "operation.h"
 #include "input_cleaner.h"
 #include "calculation_Logic.h"
 
 std::vector<std::string> CalculationLogic::calcLogic(std::vector<std::string> input){
     TypeConvert TypeConvert;
-    inputOrganization inputOrganization;
     SimpleOperation SimpleOperation;
-    unsigned long long int compLoc = inputOrganization.getComparisonLocation();
-    bool isDoneProcessing = false;
-    bool isFirstHalf;
     std::string currentCalc;
-    unsigned long long int calcStep = 0;
-    int calc1;
-    int calc2;
     int calcTemp;
-    CalculationLogic::setCalcOps(0);
-    int calcOps = CalculationLogic::getCalcOps();
     //std::cout << "[Debug] function calcOps's variable compLoc is :" << compLoc << std::endl;
     //std::cout << "[Debug] function calcOps's variable calcStep is : " << calcStep << std::endl;
     //std::cout << "[Debug] function calcOps's variable calcOps is : " << calcOps << std::endl;
-    isFirstHalf = calcStep < compLoc;
-    while(!isDoneProcessing){
-    startCalc:
-        //I have tried to do smart thing and minimize the amount of calculation by doing some circus routine.
-        //I was not that smart or knowledgeable, so I am brute-forcing the result out of this.
 
-        //std::cout << "[Debug] function calcLogic's variable calcOps is : " << calcOps << std::endl;
-        //std::cout << "[Debug] function calcLogic's variable calcStep is : " << calcStep << std::endl;
-        if(calcStep >= input.size()){
-            /*
-            std::cout << "[Debug] function calcLogic's variable calcStep at oor is : " << calcStep << std::endl;
-            std::cout << "[Debug] function calcLogic's variable calcOps at oor is : " << calcOps << std::endl;
-            std::cout << "[Debug] function calcLogic's variable input's size at oor is : " << input.size() << std::endl;
-            */
-            break;
-        }
-        currentCalc = input.at(calcStep);
-        #ifdef DEBUG
-        std::cout << "[Debug] function calcLogic's variable currentCalc is: " << currentCalc << std::endl;
-        #endif // DEBUG
-        if((currentCalc == "!") && (calcOps == 0)){
-            calcTemp = SimpleOperation.factorialOp(TypeConvert.letterToInt(input[calcStep-1]));
-            input[calcStep-1] = std::to_string(calcTemp);
-            input.erase(input.begin() + calcStep);
-            if((isFirstHalf) || (compLoc == 0)){
-                calcStep -= 1;
-            } else {
-                calcStep -= 2;
-            }
-        } else if((currentCalc == "^") && (calcOps == 1)){
-            calc1 = TypeConvert.letterToInt(input[calcStep-1]);
-            calc2 = TypeConvert.letterToInt(input[calcStep+1]);
-            calcTemp = SimpleOperation.exponentOp(calc1, calc2);
-            input[calcStep-1] = std::to_string(calcTemp);
-            input.erase(input.begin() + calcStep);
-            input.erase(input.begin() + calcStep);
-            if((isFirstHalf) || (compLoc == 0)){
-                calcStep -= 1;
-            } else {
-                calcStep -= 2;
-            }
-        } else if((calcOps == 2) && ((currentCalc == "*") || (currentCalc == "/"))){
-            calc1 = TypeConvert.letterToInt(input[calcStep-1]);
-            calc2 = TypeConvert.letterToInt(input[calcStep+1]);
-            if(currentCalc == "*"){
-                calcTemp = calc1 * calc2;
-            } else if(currentCalc == "/"){
-                if(calc2 == 0){
-                    std::cout << "Attempted to Divide by Zero.";
-                }
-                calcTemp = calc1 / calc2;
-            }
-            input[calcStep-1] = std::to_string(calcTemp);
-            input.erase(input.begin() + calcStep);
-            input.erase(input.begin() + calcStep);
-            if((isFirstHalf) || (compLoc == 0)){
-                calcStep -= 1;
-            } else {
-                calcStep -= 2;
-            }
-        } else if((calcOps == 3) && ((currentCalc == "+") || (currentCalc == "-"))){
-            calc1 = TypeConvert.letterToInt(input[calcStep-1]);
-            calc2 = TypeConvert.letterToInt(input[calcStep+1]);
-            if(currentCalc == "+"){
-                calcTemp = calc1 + calc2;
-            } else if(currentCalc == "-"){
-                calcTemp = calc1 - calc2;
-            }
-            input[calcStep-1] = std::to_string(calcTemp);
-            //std::cout << "[Debug] function calcLogic's input vector's at calcStep-1 is: " << input[calcStep-1] << std::endl;
-            input.erase(input.begin() + calcStep);
-            input.erase(input.begin() + calcStep);
-            if((isFirstHalf) || (compLoc == 0)){
-                calcStep -= 1;
-            } else {
-                calcStep -= 2;
-            }
-        }
-        if((currentCalc == "<") || (currentCalc == "<=") || (currentCalc == ">") || (currentCalc == ">=") || (currentCalc == "~=") || (currentCalc == "=")){
-            compLoc = calcStep;
-        }
-        //std::cout << "[Debug] function calcLogic's variable calcTemp is: " << calcTemp << std::endl;
-        //std::cout << "[Debug] function calcLogic's variable isFirstHalf is: " << isFirstHalf << std::endl;
-        //std::cout << "[Debug] function calcLogic's variable calcStep is: " << calcStep << std::endl;
-        //std::cout << "[Debug] function calcLogic's variable compLoc is: " << compLoc<< std::endl;
-        if(isFirstHalf && (calcStep == compLoc) && (calcOps < 3)){
-            calcStep = 0;
-            calcOps++;
-            CalculationLogic::incrementCalcOps();
-        } else if(isFirstHalf && (calcStep == compLoc) && (calcOps == 3)){
-            isFirstHalf = false;
-            calcOps = 0;
-            CalculationLogic::setCalcOps(0);
-        } else if((!isFirstHalf) && (calcStep >= (input.size()-1)) && (calcOps < 3)){
-            calcStep = compLoc;
-            calcOps++;
-            CalculationLogic::incrementCalcOps();
-        } else if((!isFirstHalf) && (calcStep >= (input.size()-1)) && (calcOps == 3)){
-            isDoneProcessing = true;
-            calcOps = 0;
-            CalculationLogic::setCalcOps(0);
-        }
-        if(calcStep >= input.size()){
-            isDoneProcessing = true;
-        }
-        if(isDoneProcessing && (compLoc != 0)){
-            CalculationLogic::setCalcOps(4);
-        }
-        if((calcStep < ULLONG_MAX) && (input.size() > 1)){
-            calcStep++;
-        } else {
-            break;
-        }
-    }
+
+    std::vector<std::string> inputVector = input;
+    std::vector<std::string> tempVector;
+    tempVector.reserve(input.size());
+    auto factorialFind = std::find(inputVector.begin(), inputVector.end(), "!");
     #ifdef DEBUG
-    std::cout << "[Debug] function calcLogic's first value of output is: " << input[0] << std::endl;
-    if(input.size() >= 3){
-        std::cout << "[Debug] function calcLogic's second value of output is: " << input[1] << std::endl;
-        std::cout << "[Debug] function calcLogic's third value of output is: " << input[2] << std::endl;
-    }
+                std::cout << 0 << std::endl;
     #endif // DEBUG
-    return input;
+    if(factorialFind != inputVector.end()){
+        for(std::size_t i = 0; i < inputVector.size(); i++){
+            #ifdef DEBUG
+                std::cout << "fact " << i << '|' << inputVector[i]<< std::endl;
+            #endif // DEBUG
+            currentCalc = inputVector[i];
+            if(currentCalc == "!"){
+                calcTemp = SimpleOperation.factorialOp(TypeConvert.letterToInt(inputVector[i-1]));
+                tempVector.push_back(std::to_string(calcTemp));
+            } else {
+                if(i+1 < inputVector.size()){
+                    if(inputVector[i+1] != "!"){
+                        tempVector.push_back(inputVector[i]);
+                    }
+                } else if(i == inputVector.size()-1){
+                    if(inputVector[i] != "!"){
+                        tempVector.push_back(inputVector[i]);
+                    }
+                }
+            }
+        }
+        inputVector = tempVector;
+        tempVector.clear();
+    }
+    auto expFind = std::find(inputVector.begin(), inputVector.end(), "^");
+    #ifdef DEBUG
+        std::cout << 10 << std::endl;
+    #endif // DEBUG
+    if(expFind != inputVector.end()){
+        for(std::size_t i = 0; i < inputVector.size(); i++){
+            #ifdef DEBUG
+                std::cout << "exp " << i << '|' << inputVector[i]<< std::endl;
+            #endif // DEBUG
+            currentCalc = inputVector[i];
+            if(currentCalc == "^"){
+                calcTemp = SimpleOperation.exponentOp(TypeConvert.letterToInt(inputVector[i-1]), TypeConvert.letterToInt(inputVector[i+1]));
+                tempVector.push_back(std::to_string(calcTemp));
+                i++;
+                if(i >= inputVector.size()){
+                    break;
+                }
+            } else {
+                if((i+1 < inputVector.size()) && (i != 0)){
+                    if((inputVector[i-1] != "^") && (inputVector[i+1] != "^")){
+                        tempVector.push_back(inputVector[i]);
+                    }
+                } else if(i == 0){
+                    if(inputVector[i+1] != "^"){
+                        tempVector.push_back(inputVector[i]);
+                    }
+                } else if(i == inputVector.size()-1){
+                    if(inputVector[i-1] != "^"){
+                        tempVector.push_back(inputVector[i]);
+                    }
+                }
+            }
+        }
+        inputVector = tempVector;
+        tempVector.clear();
+    }
+
+    auto multiFind = std::find(inputVector.begin(), inputVector.end(), "*");
+    auto divFind = std::find(inputVector.begin(), inputVector.end(), "/");
+    #ifdef DEBUG
+        std::cout << 20 << std::endl;
+    #endif // DEBUG
+    if((multiFind != inputVector.end()) || (divFind != inputVector.end())){
+        for(std::size_t i = 0; i < inputVector.size(); i++){
+            #ifdef DEBUG
+                std::cout << "muldiv " << i << '|' << inputVector[i] << std::endl;
+            #endif // DEBUG
+            currentCalc = inputVector[i];
+            if(currentCalc == "*"){
+                calcTemp = TypeConvert.letterToInt(inputVector[i-1]) * TypeConvert.letterToInt(inputVector[i+1]);
+                tempVector.push_back(std::to_string(calcTemp));
+                i++;
+            } else if(currentCalc == "/"){
+                calcTemp = TypeConvert.letterToInt(inputVector[i-1]) / TypeConvert.letterToInt(inputVector[i+1]);
+                tempVector.push_back(std::to_string(calcTemp));
+                i++;
+            } else {
+                if((i+1 < inputVector.size()) && (i != 0)){
+                    if((inputVector[i-1] != "*") && (inputVector[i-1] != "/") && (inputVector[i+1] != "*") && (inputVector[i+1] != "/")){
+                        tempVector.push_back(inputVector[i]);
+                    }
+                } else if(i == 0){
+                    if((inputVector[i+1] != "*") && (inputVector[i+1] != "/")){
+                        tempVector.push_back(inputVector[i]);
+                    }
+                } else if(i == inputVector.size()-1){
+                    if((inputVector[i-1] != "*") || (inputVector[i-1] != "/")){
+                        tempVector.push_back(inputVector[i]);
+                    }
+                }
+                if(i >= inputVector.size()){
+                    break;
+                }
+            }
+        }
+        inputVector = tempVector;
+        tempVector.clear();
+    }
+    auto addFind = std::find(inputVector.begin(), inputVector.end(), "+");
+    auto subFind = std::find(inputVector.begin(), inputVector.end(), "-");
+    #ifdef DEBUG
+        std::cout << 30 << std::endl;
+    #endif // DEBUG
+    if((addFind != inputVector.end()) || (subFind != inputVector.end())){
+        for(std::size_t i = 0; i < inputVector.size(); i++){
+            #ifdef DEBUG
+                std::cout << "addsub " << i << '|' << inputVector[i]<< std::endl;
+            #endif // DEBUG
+            currentCalc = inputVector[i];
+            if(currentCalc == "+"){
+                calcTemp = TypeConvert.letterToInt(inputVector[i-1]) + TypeConvert.letterToInt(inputVector[i+1]);
+                tempVector.push_back(std::to_string(calcTemp));
+                i++;
+                if(i >= inputVector.size()){
+                    break;
+                }
+            } else if(currentCalc == "-"){
+                calcTemp = TypeConvert.letterToInt(inputVector[i-1]) - TypeConvert.letterToInt(inputVector[i+1]);
+                tempVector.push_back(std::to_string(calcTemp));
+                i++;
+                if(i >= inputVector.size()){
+                    break;
+                }
+            } else {
+                if((i+1 < inputVector.size()) && (i != 0)){
+                    if((inputVector[i-1] != "+") && (inputVector[i-1] != "-") && (inputVector[i+1] != "+") && (inputVector[i+1] != "-")){
+                        tempVector.push_back(inputVector[i]);
+                    }
+                } else if(i == 0){
+                    if((inputVector[i+1] != "+") && (inputVector[i+1] != "-")){
+                        tempVector.push_back(inputVector[i]);
+                    }
+                } else if(i == inputVector.size()-1){
+                    if((inputVector[i-1] != "+") || (inputVector[i-1] != "-")){
+                        tempVector.push_back(inputVector[i]);
+                    }
+                }
+            }
+        }
+        inputVector = tempVector;
+        tempVector.clear();
+    }
+
+    #ifdef DEBUG
+        std::cout << 40 << std::endl;
+    #endif // DEBUG
+    return inputVector;
 }
 
 std::vector<std::string> CalculationLogic::singleComparisonLogic(std::vector<std::string> input){
