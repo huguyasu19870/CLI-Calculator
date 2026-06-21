@@ -9,7 +9,7 @@
 #include "input_cleaner.h"
 #include "calculation_Logic.h"
 
-std::vector<std::string> CalculationLogic::calcLogic(std::vector<std::string> input){
+std::vector<std::string> CalculationLogic::calcLogic(const std::vector<std::string> &input){
     TypeConvert TypeConvert;
     SimpleOperation SimpleOperation;
     std::string currentCalc;
@@ -116,7 +116,7 @@ std::vector<std::string> CalculationLogic::calcLogic(std::vector<std::string> in
                         tempVector.push_back(inputVector[i]);
                     }
                 } else if(i == inputVector.size()-1){
-                    if((inputVector[i-1] != "*") || (inputVector[i-1] != "/")){
+                    if((inputVector[i-1] != "*") && (inputVector[i-1] != "/")){
                         tempVector.push_back(inputVector[i]);
                     }
                 }
@@ -163,7 +163,7 @@ std::vector<std::string> CalculationLogic::calcLogic(std::vector<std::string> in
                         tempVector.push_back(inputVector[i]);
                     }
                 } else if(i == inputVector.size()-1){
-                    if((inputVector[i-1] != "+") || (inputVector[i-1] != "-")){
+                    if((inputVector[i-1] != "+") && (inputVector[i-1] != "-")){
                         tempVector.push_back(inputVector[i]);
                     }
                 }
