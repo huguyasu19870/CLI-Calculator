@@ -24,9 +24,16 @@ public:
     void setComparisonLocation(unsigned long long int input){
         comparisonLocation = input;
     };
+    std::vector<std::size_t>& getComparisonLocationList(){
+        return comparisonLocationList;
+    }
+    void appendComparisonLocationList(std::size_t &input){
+        comparisonLocationList.push_back(input);
+    }
 private:
     //std::unordered_map<unsigned long long int, unsigned long long int> oopLocation;
     inline static unsigned long long int comparisonLocation = 0;
+    inline static std::vector<std::size_t> comparisonLocationList;
 };
 
 #endif // INPUT_CLEANER_H_INCLUDED
