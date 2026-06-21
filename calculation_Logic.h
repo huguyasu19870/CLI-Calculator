@@ -5,7 +5,7 @@
 
 class CalculationLogic{
 public:
-    std::vector<std::string> calcLogic(std::vector<std::string> input);
+    std::vector<std::string> calcLogic(const std::vector<std::string> &input);
     std::vector<std::string> singleComparisonLogic(std::vector<std::string> input);
     int getCalcOps(){
         return calcOps;
