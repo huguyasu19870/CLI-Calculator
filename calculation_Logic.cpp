@@ -28,9 +28,11 @@ std::vector<std::string> CalculationLogic::calcLogic(const std::vector<std::stri
     #endif // DEBUG
     if(factorialFind != inputVector.end()){
         for(std::size_t i = 0; i < inputVector.size(); i++){
+            /*
             #ifdef DEBUG
                 std::cout << "fact " << i << '|' << inputVector[i]<< std::endl;
             #endif // DEBUG
+            */
             currentCalc = inputVector[i];
             if(currentCalc == "!"){
                 calcTemp = SimpleOperation.factorialOp(TypeConvert.letterToInt(inputVector[i-1]));
@@ -47,7 +49,7 @@ std::vector<std::string> CalculationLogic::calcLogic(const std::vector<std::stri
                 }
             }
         }
-        inputVector = tempVector;
+        inputVector.swap(tempVector);
         tempVector.clear();
     }
     auto expFind = std::find(inputVector.begin(), inputVector.end(), "^");
@@ -56,17 +58,16 @@ std::vector<std::string> CalculationLogic::calcLogic(const std::vector<std::stri
     #endif // DEBUG
     if(expFind != inputVector.end()){
         for(std::size_t i = 0; i < inputVector.size(); i++){
+            /*
             #ifdef DEBUG
                 std::cout << "exp " << i << '|' << inputVector[i]<< std::endl;
             #endif // DEBUG
+            */
             currentCalc = inputVector[i];
             if(currentCalc == "^"){
                 calcTemp = SimpleOperation.exponentOp(TypeConvert.letterToInt(inputVector[i-1]), TypeConvert.letterToInt(inputVector[i+1]));
                 tempVector.push_back(std::to_string(calcTemp));
                 i++;
-                if(i >= inputVector.size()){
-                    break;
-                }
             } else {
                 if((i+1 < inputVector.size()) && (i != 0)){
                     if((inputVector[i-1] != "^") && (inputVector[i+1] != "^")){
@@ -83,7 +84,7 @@ std::vector<std::string> CalculationLogic::calcLogic(const std::vector<std::stri
                 }
             }
         }
-        inputVector = tempVector;
+        inputVector.swap(tempVector);
         tempVector.clear();
     }
 
@@ -94,9 +95,11 @@ std::vector<std::string> CalculationLogic::calcLogic(const std::vector<std::stri
     #endif // DEBUG
     if((multiFind != inputVector.end()) || (divFind != inputVector.end())){
         for(std::size_t i = 0; i < inputVector.size(); i++){
+            /*
             #ifdef DEBUG
                 std::cout << "muldiv " << i << '|' << inputVector[i] << std::endl;
             #endif // DEBUG
+            */
             currentCalc = inputVector[i];
             if(currentCalc == "*"){
                 calcTemp = TypeConvert.letterToInt(inputVector[i-1]) * TypeConvert.letterToInt(inputVector[i+1]);
@@ -125,7 +128,7 @@ std::vector<std::string> CalculationLogic::calcLogic(const std::vector<std::stri
                 }
             }
         }
-        inputVector = tempVector;
+        inputVector.swap(tempVector);
         tempVector.clear();
     }
     auto addFind = std::find(inputVector.begin(), inputVector.end(), "+");
@@ -135,24 +138,20 @@ std::vector<std::string> CalculationLogic::calcLogic(const std::vector<std::stri
     #endif // DEBUG
     if((addFind != inputVector.end()) || (subFind != inputVector.end())){
         for(std::size_t i = 0; i < inputVector.size(); i++){
+            /*
             #ifdef DEBUG
                 std::cout << "addsub " << i << '|' << inputVector[i]<< std::endl;
             #endif // DEBUG
+            */
             currentCalc = inputVector[i];
             if(currentCalc == "+"){
                 calcTemp = TypeConvert.letterToInt(inputVector[i-1]) + TypeConvert.letterToInt(inputVector[i+1]);
                 tempVector.push_back(std::to_string(calcTemp));
                 i++;
-                if(i >= inputVector.size()){
-                    break;
-                }
             } else if(currentCalc == "-"){
                 calcTemp = TypeConvert.letterToInt(inputVector[i-1]) - TypeConvert.letterToInt(inputVector[i+1]);
                 tempVector.push_back(std::to_string(calcTemp));
                 i++;
-                if(i >= inputVector.size()){
-                    break;
-                }
             } else {
                 if((i+1 < inputVector.size()) && (i != 0)){
                     if((inputVector[i-1] != "+") && (inputVector[i-1] != "-") && (inputVector[i+1] != "+") && (inputVector[i+1] != "-")){
@@ -169,7 +168,7 @@ std::vector<std::string> CalculationLogic::calcLogic(const std::vector<std::stri
                 }
             }
         }
-        inputVector = tempVector;
+        inputVector.swap(tempVector);
         tempVector.clear();
     }
 
