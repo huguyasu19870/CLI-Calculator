@@ -15,14 +15,18 @@
 
 int main()
 {
-    inputOrganization inputOrganization;
-    TypeConvert TypeConvert;
-    CalculationLogic CalculationLogic;
-    calcTest calcTest;
+    inputOrganization inOrg;
+    TypeConvert TC;
+    CalculationLogic CL;
+    calcTest CT;
 
     std::string inputValue;
+    bool debugMode = false;
     bool testMode = false;
     bool shouldEnd = false;
+    #ifdef DEBUG
+        debugMode = true;
+    #endif // DEBUG
 reInput:
     std::cout << "Please input the equation." << std::endl;
     std::cout << "If you want to end this program, type \"Quit \" or \"Exit\"." << std::endl;
@@ -36,16 +40,16 @@ reInput:
         shouldEnd = true;
         return 0;
     } else if((inputValue == "test") || (inputValue == "Test")){
-        calcTest.setStartClock();
+        CT.setStartClock();
         testMode = true;
         goto testInit;
     }
-    inputValue = inputOrganization.inputCleaner(inputValue);
+    inputValue = inOrg.inputCleaner(inputValue);
     if(inputValue.empty()){
         std::cout << "Provided input resolved into empty." << std::endl;
         goto reInput;
     }
-    inputValue = inputOrganization.inputCleaner(inputValue);
+    inputValue = inOrg.inputCleaner(inputValue);
     //Above codes essentially captures the programming into while loop if input is empty.
 
 
@@ -56,42 +60,42 @@ nullOutput:
         }
 testInit:
     if(testMode){
-        int testOp = calcTest.getTestOps();
-        int testPhase = calcTest.getTestNum();
-        int testType = calcTest.getTestType();
+        int testOp = CT.getTestOps();
+        int testPhase = CT.getTestNum();
+        int testType = CT.getTestType();
         std::array<std::string, 5> testArray;
         if(testType == 0){
-            testArray = calcTest.simpleIntegerOperationTestCases(testOp);
+            testArray = CT.simpleIntegerOperationTestCases(testOp);
         }
         inputValue = testArray[testPhase];
     }
-    std::unordered_map<std::size_t, std::string> calcFlg = inputOrganization.calculationSpecifier(inputValue);
-//    std::unordered_map<unsigned long long int, unsigned long long int> location = inputOrganization.getOopLocation();
+    std::unordered_map<std::size_t, std::string> calcFlg = inOrg.calculationSpecifier(inputValue);
+//    std::unordered_map<unsigned long long int, unsigned long long int> location = inOrg.getOopLocation();
 //    unsigned long long int delCount = 0;
-    std::vector<std::string> calcFlg2 = inputOrganization.returnOrderedFormula(calcFlg);
+    std::vector<std::string> calcFlg2 = inOrg.returnOrderedFormula(calcFlg);
     for(int i = 0; i < calcFlg2.size(); i++){
         std::string elem = calcFlg2[i];
         //std::cout << "[Debug] function main's elements of calcFlg2 is: " << elem << std::endl;
         if((elem == "<") || (elem == ">") || (elem == "=") || (elem == "~=") || (elem == ">=") || (elem == "<=")){
-            inputOrganization.setComparisonLocation(i);
+            inOrg.setComparisonLocation(i);
         }
     }
     int result1;
     int result2;
     int result;
-    calcFlg2 = CalculationLogic.calcLogic(calcFlg2);
+    calcFlg2 = CL.calcLogic(calcFlg2);
     if(calcFlg2[0] == "null"){
         goto nullOutput;
     }
-    int calcOps = CalculationLogic.getCalcOps();
+    int calcOps = CL.getCalcOps();
     //std::cout << "[Debug] main function's variable calcOps is: " << calcOps << std::endl;
 
     if((calcOps == 4) && (!testMode)){
-        std::vector<std::string> comparisonResultVector = CalculationLogic.singleComparisonLogic(calcFlg2);
+        std::vector<std::string> comparisonResultVector = CL.singleComparisonLogic(calcFlg2);
         std::string compOp = comparisonResultVector[1];
-        result1 = TypeConvert.letterToInt(comparisonResultVector[0]);
-        result2 = TypeConvert.letterToInt(comparisonResultVector[2]);
-        bool compResult = static_cast<bool>(TypeConvert.letterToInt(comparisonResultVector[3]));
+        result1 = TC.letterToInt(comparisonResultVector[0]);
+        result2 = TC.letterToInt(comparisonResultVector[2]);
+        bool compResult = static_cast<bool>(TC.letterToInt(comparisonResultVector[3]));
         std::string stringCompResult;
         if(compResult){
             stringCompResult = "true";
@@ -102,29 +106,29 @@ testInit:
         std::cout << result1 << compOp << result2 << std::endl;
         std::cout << "Which is " << stringCompResult << std::endl << std::endl;
     } else if(!testMode) {
-        result = TypeConvert.letterToInt(calcFlg2[0]);
+        result = TC.letterToInt(calcFlg2[0]);
         std::cout << "Result of " << inputValue << " is" << std::endl << result << std::endl << std::endl;
     } else {
-        int testOp = calcTest.getTestOps();
-        int testPhase = calcTest.getTestNum();
-        int testType = calcTest.getTestType();
+        int testOp = CT.getTestOps();
+        int testPhase = CT.getTestNum();
+        int testType = CT.getTestType();
         std::string testResult = calcFlg2[0];
         if(testType == 0){
-            std::array<int, 5> answerArray = calcTest.simpleIntegerOperationTestAnswer(testOp);
+            std::array<int, 5> answerArray = CT.simpleIntegerOperationTestAnswer(testOp);
             int expTestResult = answerArray[testPhase];
             int actualTestResult;
             if(testOp < 6){
-                actualTestResult = TypeConvert.letterToInt(calcFlg2[0]);
+                actualTestResult = TC.letterToInt(calcFlg2[0]);
             } else if(testOp >= 6){
-                std::vector<std::string> comparisonFullResult = CalculationLogic.singleComparisonLogic(calcFlg2);
-                actualTestResult = TypeConvert.letterToInt(comparisonFullResult[3]);
+                std::vector<std::string> comparisonFullResult = CL.singleComparisonLogic(calcFlg2);
+                actualTestResult = TC.letterToInt(comparisonFullResult[3]);
             }
             bool isResultEqual = expTestResult == actualTestResult;
-            calcTest.insertSimpleResultTempArray(isResultEqual, testPhase);
-            calcTest.incrementTestNum();
+            CT.insertSimpleResultTempArray(isResultEqual, testPhase);
+            CT.incrementTestNum();
             testPhase++;
             if(testPhase == answerArray.size()){
-                std::array<bool, 5> resultArray = calcTest.getSimpleResultTempArray();
+                std::array<bool, 5> resultArray = CT.getSimpleResultTempArray();
                 bool hasNegative = false;
                 for(const bool& elem: resultArray){
                     if(!elem){
@@ -133,12 +137,12 @@ testInit:
                     }
                 }
                 if(hasNegative){
-                    calcTest.insertSimpleResultArray(false, testOp);
+                    CT.insertSimpleResultArray(false, testOp);
                 } else {
-                    calcTest.insertSimpleResultArray(true, testOp);
+                    CT.insertSimpleResultArray(true, testOp);
                 }
-                calcTest.setTestNum(0);
-                calcTest.incrementTestOps();
+                CT.setTestNum(0);
+                CT.incrementTestOps();
                 testOp++;
             }
             std::string comparisonResultString;
@@ -164,7 +168,7 @@ testInit:
     }
     if(testMode){
 endTest:
-        calcTest.finalTestValidation();
+        CT.finalTestValidation();
     }
     return 0;
 }
