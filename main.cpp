@@ -86,6 +86,11 @@ testInit:
     calcFlg2 = CL.calcLogic(calcFlg2);
     if(calcFlg2[0] == "null"){
         goto nullOutput;
+    } else if(calcFlg2[0] == "$error"){
+        if(calcFlg2[1] == "ZeroDivision"){
+            std::cout << "Division by Zero happened." << std::endl;
+            goto reInput;
+        }
     }
     int calcOps = CL.getCalcOps();
     //std::cout << "[Debug] main function's variable calcOps is: " << calcOps << std::endl;
