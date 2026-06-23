@@ -11,6 +11,11 @@ public:
     std::unordered_map<std::size_t, std::string> calculationSpecifier(std::string &input);
     std::vector<std::vector<std::size_t> > operationLocator(std::string input);
     std::vector<std::string> returnOrderedFormula(std::unordered_map<std::size_t, std::string> &input);
+    bool isNumberComp(char &input);
+    bool isMathOperator(char &input);
+    bool isComparisonOperator(char &input);
+    bool isParenthesis(char &input);
+    bool isAlphabet(char &input);
     /*
     std::unordered_map<unsigned long long int, unsigned long long int> getOopLocation(){
         return const &oopLocation;
