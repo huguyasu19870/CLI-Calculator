@@ -10,13 +10,16 @@
 #include "calculation_Logic.h"
 
 std::vector<std::string> CalculationLogic::calcLogic(const std::vector<std::string> &input){
-    TypeConvert TypeConvert;
-    SimpleOperation SimpleOperation;
+    TypeConvert TC;
+    SimpleOperation SO;
     std::string currentCalc;
     int calcTemp;
+    #ifdef DEBUG
+        for(const auto& elem : input){
+            std::cout << "[Debug] function calcLogic's input components is " << elem << std::endl;
+        }
+    #endif // DEBUG
     //std::cout << "[Debug] function calcOps's variable compLoc is :" << compLoc << std::endl;
-    //std::cout << "[Debug] function calcOps's variable calcStep is : " << calcStep << std::endl;
-    //std::cout << "[Debug] function calcOps's variable calcOps is : " << calcOps << std::endl;
 
 
     std::vector<std::string> inputVector = input;
@@ -35,7 +38,7 @@ std::vector<std::string> CalculationLogic::calcLogic(const std::vector<std::stri
             */
             currentCalc = inputVector[i];
             if(currentCalc == "!"){
-                calcTemp = SimpleOperation.factorialOp(TypeConvert.letterToInt(inputVector[i-1]));
+                calcTemp = SO.factorialOp(TC.letterToInt(inputVector[i-1]));
                 tempVector.push_back(std::to_string(calcTemp));
             } else {
                 if(i+1 < inputVector.size()){
@@ -65,7 +68,7 @@ std::vector<std::string> CalculationLogic::calcLogic(const std::vector<std::stri
             */
             currentCalc = inputVector[i];
             if(currentCalc == "^"){
-                calcTemp = SimpleOperation.exponentOp(TypeConvert.letterToInt(inputVector[i-1]), TypeConvert.letterToInt(inputVector[i+1]));
+                calcTemp = SO.exponentOp(TC.letterToInt(inputVector[i-1]), TC.letterToInt(inputVector[i+1]));
                 tempVector.push_back(std::to_string(calcTemp));
                 i++;
             } else {
@@ -102,11 +105,11 @@ std::vector<std::string> CalculationLogic::calcLogic(const std::vector<std::stri
             */
             currentCalc = inputVector[i];
             if(currentCalc == "*"){
-                calcTemp = TypeConvert.letterToInt(inputVector[i-1]) * TypeConvert.letterToInt(inputVector[i+1]);
+                calcTemp = TC.letterToInt(inputVector[i-1]) * TC.letterToInt(inputVector[i+1]);
                 tempVector.push_back(std::to_string(calcTemp));
                 i++;
             } else if(currentCalc == "/"){
-                calcTemp = TypeConvert.letterToInt(inputVector[i-1]) / TypeConvert.letterToInt(inputVector[i+1]);
+                calcTemp = TC.letterToInt(inputVector[i-1]) / TC.letterToInt(inputVector[i+1]);
                 tempVector.push_back(std::to_string(calcTemp));
                 i++;
             } else {
@@ -145,11 +148,11 @@ std::vector<std::string> CalculationLogic::calcLogic(const std::vector<std::stri
             */
             currentCalc = inputVector[i];
             if(currentCalc == "+"){
-                calcTemp = TypeConvert.letterToInt(inputVector[i-1]) + TypeConvert.letterToInt(inputVector[i+1]);
+                calcTemp = TC.letterToInt(inputVector[i-1]) + TC.letterToInt(inputVector[i+1]);
                 tempVector.push_back(std::to_string(calcTemp));
                 i++;
             } else if(currentCalc == "-"){
-                calcTemp = TypeConvert.letterToInt(inputVector[i-1]) - TypeConvert.letterToInt(inputVector[i+1]);
+                calcTemp = TC.letterToInt(inputVector[i-1]) - TC.letterToInt(inputVector[i+1]);
                 tempVector.push_back(std::to_string(calcTemp));
                 i++;
             } else {
@@ -179,11 +182,11 @@ std::vector<std::string> CalculationLogic::calcLogic(const std::vector<std::stri
 }
 
 std::vector<std::string> CalculationLogic::singleComparisonLogic(std::vector<std::string> input){
-    TypeConvert TypeConvert;
+    TypeConvert TC;
     std::vector<std::string> comparisonResult;
     comparisonResult.resize(4);
-    int result1 = TypeConvert.letterToInt(input[0]);
-    int result2 = TypeConvert.letterToInt(input[2]);
+    int result1 = TC.letterToInt(input[0]);
+    int result2 = TC.letterToInt(input[2]);
     std::string compOp = input[1];
     bool compResult;
     if(compOp == "<"){
