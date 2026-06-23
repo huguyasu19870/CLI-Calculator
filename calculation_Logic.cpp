@@ -109,7 +109,14 @@ std::vector<std::string> CalculationLogic::calcLogic(const std::vector<std::stri
                 tempVector.push_back(std::to_string(calcTemp));
                 i++;
             } else if(currentCalc == "/"){
-                calcTemp = TC.letterToInt(inputVector[i-1]) / TC.letterToInt(inputVector[i+1]);
+                try{
+                    if(inputVector[i+1] == "0"){
+                        throw std::invalid_argument("Division by zero is not defined.");
+                    }
+                    calcTemp = TC.letterToInt(inputVector[i-1]) / TC.letterToInt(inputVector[i+1]);
+                } catch (const std::invalid_argument &e){
+                    return (tempVector = {"$error", "ZeroDivision"});
+                }
                 tempVector.push_back(std::to_string(calcTemp));
                 i++;
             } else {
