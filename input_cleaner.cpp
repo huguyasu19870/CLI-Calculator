@@ -7,42 +7,29 @@
 #include "input_cleaner.h"
 #include "operation.h"
 
+bool inputOrganization::isNumberComp(char &in){
+    return (((in >= '0') && (in <= '9')) || (in == '.'));
+}
+bool inputOrganization::isMathOperator(char &in){
+    return ((in == '!') || (in == '*') || (in == '+') || (in == '-') || (in == '/') || (in == '^'));
+}
+bool inputOrganization::isParenthesis(char &in){
+    return ((in == '(') || (in == ')') || (in == '[') || (in == ']') || (in == '{') || (in == '}') || (in == '|'));
+}
+bool inputOrganization::isAlphabet(char &in){
+    return (((in >= 'A') && (in == 'Z')) || ((in >= 'a') && (in <= 'z')));
+}
+bool inputOrganization::isComparisonOperator(char &in){
+    return ((in == '<') || (in == '>') || (in == '=') || (in == '~'));
+}
+
 std::string inputOrganization::inputCleaner(std::string &input){
     std::string equationOutput = "";
     for(std::size_t i = 0; i < input.length(); i++){
         char currentLetter = input[i];
         //V1: If letter of input[i] is number or symbol used in mathematics, then add them into output string.
-        switch(currentLetter){
-        case 33:
-        case 42:
-        case 43:
-        case 45:
-        case 46:
-        case 47:
-        case 60:
-        case 61:
-        case 62:
-        case 94:
-        case 126:
-        //case 40:
-        //case 41:
-        //case 91:
-        //case 93:
-        //case 123:
-        //case 124:
-        //case 125:
-        case 48:
-        case 49:
-        case 50:
-        case 51:
-        case 52:
-        case 53:
-        case 54:
-        case 55:
-        case 56:
-        case 57:
+        if(inputOrganization::isNumberComp(currentLetter) || inputOrganization::isMathOperator(currentLetter) || inputOrganization::isComparisonOperator(currentLetter)){
             equationOutput += currentLetter;
-            break;
         }
     }
     return equationOutput;
@@ -66,74 +53,71 @@ std::unordered_map<std::size_t, std::string> inputOrganization::calculationSpeci
             } else {
                 lastLetter = input[i-1];
             }
-            //I have no idea when I have programmed this variable, but origially (before fixing for github) it was apparently tempEq[something], which is just why.
-            if(((lastLetter >= 48) && (lastLetter <= 57))|| (lastLetter == 46)){
-                if((currentLetter != 46) && (((currentLetter < 48) || (currentLetter > 57)))){
-                    //If last letter is number or period, and current letter is not, then add to map.
+            if(inputOrganization::isNumberComp(lastLetter)){
+                if((!inputOrganization::isNumberComp(currentLetter)) && (currentLetter >= 32)){
                     result.insert({locationKey, tempEq});
                     tempEq = "";
                     locationKey++;
                 }
-            } else if(lastLetter == 47){
-                if((currentLetter != 61) && (currentLetter >= 32)){
-                    //If last letter is slash sign and current letter is not equal sign, then add to map.
+            } else if(lastLetter == '/'){
+                if((currentLetter != '=') && (currentLetter >= 32)){
                     result.insert({locationKey, tempEq});
                     tempEq = "";
                     locationKey++;
                 }
-            } else if(lastLetter == 60){
-                if((currentLetter != 61) && (currentLetter >= 32)){
-                    //If last letter is smaller than sign and current letter is not equal sign, then add to map.
+            } else if(lastLetter == '<'){
+                if((currentLetter != '=') && (currentLetter >= 32)){
                     result.insert({locationKey, tempEq});
                     tempEq = "";
                     inputOrganization::setComparisonLocation(locationKey);
+                    inputOrganization::appendComparisonLocationList(locationKey);
                     hasComparison = true;
                     locationKey++;
                 }
-            } else if(lastLetter == 62){
-                if((currentLetter != 61) && (currentLetter >= 32)){
-                    //If last letter is larger than sign and current letter is not equal sign, then add to map.
+            } else if(lastLetter == '>'){
+                if((currentLetter != '=') && (currentLetter >= 32)){
                     result.insert({locationKey, tempEq});
                     tempEq = "";
                     inputOrganization::setComparisonLocation(locationKey);
+                    inputOrganization::appendComparisonLocationList(locationKey);
                     hasComparison = true;
                     locationKey++;
                 }
-            } else if(lastLetter == 126){
-                if((currentLetter != 61) && (currentLetter >= 32)){
-                    //If last letter is tilde and current letter is not equal sign, then add to map.
+            } else if(lastLetter == '~'){
+                if((currentLetter != '=') && (currentLetter >= 32)){
                     result.insert({locationKey, tempEq});
                     tempEq = "";
                     inputOrganization::setComparisonLocation(locationKey);
+                    inputOrganization::appendComparisonLocationList(locationKey);
                     hasComparison = true;
                     locationKey++;
                 }
-            } else if((lastLetter != 46) && (((lastLetter < 48) && (lastLetter >= 32)) || (lastLetter > 57))){
-                //If last letter is not a number or period and current letter is number, period, inequality sign, and equality sign, then add to map.
-                if(((currentLetter >= 48) && (currentLetter <= 57))|| (currentLetter == 46)){
+            } else if((!inputOrganization::isNumberComp(lastLetter)) && (lastLetter >= 32)){
+                if(inputOrganization::isNumberComp(currentLetter)){
                     result.insert({locationKey, tempEq});
                     tempEq = "";
                     locationKey++;
-                } else if ((currentLetter == 60) || (currentLetter == 61) || (currentLetter == 62)){
+                } else if (inputOrganization::isComparisonOperator(currentLetter)){
                     result.insert({locationKey, tempEq});
                     tempEq = "";
                     inputOrganization::setComparisonLocation(locationKey);
+                    inputOrganization::appendComparisonLocationList(locationKey);
                     hasComparison = true;
                     locationKey++;
                 }
-            } else if((currentLetter == 43) || (currentLetter == 45)){
-                //If current letter is plus or minus sign and last letter is mathematical operation, then add to map.
-                if((lastLetter == 33) || (lastLetter == 42) || (lastLetter == 43) || (lastLetter == 45) || (lastLetter == 47) || (lastLetter == 61) || (lastLetter == 40) || (lastLetter == 41) || (lastLetter == 60) || (lastLetter == 62) || (lastLetter == 91) || (lastLetter == 93) || (lastLetter == 94) || (lastLetter == 123) || (lastLetter == 124) || (lastLetter == 125) || (lastLetter == 126)){
+            } else if((currentLetter == '+') || (currentLetter == '-')){
+                if((inputOrganization::isMathOperator(lastLetter)) || (inputOrganization::isComparisonOperator(lastLetter)) || (inputOrganization::isParenthesis(lastLetter))){
                     result.insert({locationKey, tempEq});
                     tempEq = "";
-                    if((lastLetter == 60) || (lastLetter == 61) || (lastLetter == 62)){
+                    if(inputOrganization::isComparisonOperator(lastLetter)){
                         inputOrganization::setComparisonLocation(locationKey);
+                        inputOrganization::appendComparisonLocationList(locationKey);
                         hasComparison = true;
                     }
                     locationKey++;
                 }
-            } else if((currentLetter == 60) || (currentLetter == 61) || (currentLetter == 62)){
-                if(lastLetter == 33){
+            } else if(inputOrganization::isComparisonOperator(currentLetter)){
+                if(lastLetter == '!'){
                     result.insert({locationKey, tempEq});
                     tempEq = "";
                     locationKey++;
@@ -150,12 +134,6 @@ std::unordered_map<std::size_t, std::string> inputOrganization::calculationSpeci
     if(!hasComparison){
         inputOrganization::setComparisonLocation(0);
     }
-    /*
-    unsigned long long int compLoc = inputOrganization::getComparisonLocation();
-    int anotherComploc = CalcLogic.getCompLoc();
-    std::cout << "[Debug] function calculationSpecifier's comparisonLocation is: " << compLoc << std::endl;
-    std::cout << "[Debug] current class CalculationLogic's compLoc private variable is: " << anotherComploc << std::endl;
-    */
     return result;
 }
 
