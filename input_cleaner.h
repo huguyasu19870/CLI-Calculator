@@ -5,7 +5,7 @@
 #include <vector>
 #include <cstddef>
 
-class inputOrganization{
+class InputOrganization{
 public:
     std::string inputCleaner(std::string &input);
     std::unordered_map<std::size_t, std::string> calculationSpecifier(std::string &input);
