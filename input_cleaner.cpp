@@ -7,28 +7,28 @@
 #include "input_cleaner.h"
 #include "operation.h"
 
-bool inputOrganization::isNumberComp(char &in){
+bool InputOrganization::isNumberComp(char &in){
     return (((in >= '0') && (in <= '9')) || (in == '.'));
 }
-bool inputOrganization::isMathOperator(char &in){
+bool InputOrganization::isMathOperator(char &in){
     return ((in == '!') || (in == '*') || (in == '+') || (in == '-') || (in == '/') || (in == '^'));
 }
-bool inputOrganization::isParenthesis(char &in){
+bool InputOrganization::isParenthesis(char &in){
     return ((in == '(') || (in == ')') || (in == '[') || (in == ']') || (in == '{') || (in == '}') || (in == '|'));
 }
-bool inputOrganization::isAlphabet(char &in){
+bool InputOrganization::isAlphabet(char &in){
     return (((in >= 'A') && (in == 'Z')) || ((in >= 'a') && (in <= 'z')));
 }
-bool inputOrganization::isComparisonOperator(char &in){
+bool InputOrganization::isComparisonOperator(char &in){
     return ((in == '<') || (in == '>') || (in == '=') || (in == '~'));
 }
 
-std::string inputOrganization::inputCleaner(std::string &input){
+std::string InputOrganization::inputCleaner(std::string &input){
     std::string equationOutput = "";
     for(std::size_t i = 0; i < input.length(); i++){
         char currentLetter = input[i];
         //V1: If letter of input[i] is number or symbol used in mathematics, then add them into output string.
-        if(inputOrganization::isNumberComp(currentLetter) || inputOrganization::isMathOperator(currentLetter) || inputOrganization::isComparisonOperator(currentLetter)){
+        if(InputOrganization::isNumberComp(currentLetter) || InputOrganization::isMathOperator(currentLetter) || InputOrganization::isComparisonOperator(currentLetter)){
             equationOutput += currentLetter;
         }
     }
@@ -36,7 +36,7 @@ std::string inputOrganization::inputCleaner(std::string &input){
 }
 
 //Do I need this to be unordered map?
-std::unordered_map<std::size_t, std::string> inputOrganization::calculationSpecifier(std::string &input){
+std::unordered_map<std::size_t, std::string> InputOrganization::calculationSpecifier(std::string &input){
     std::unordered_map<std::size_t, std::string> result;
     result.reserve((static_cast<int>(input.length()/2)));
     std::string tempEq = "";
@@ -53,8 +53,8 @@ std::unordered_map<std::size_t, std::string> inputOrganization::calculationSpeci
             } else {
                 lastLetter = input[i-1];
             }
-            if(inputOrganization::isNumberComp(lastLetter)){
-                if((!inputOrganization::isNumberComp(currentLetter)) && (currentLetter >= 32)){
+            if(InputOrganization::isNumberComp(lastLetter)){
+                if((!InputOrganization::isNumberComp(currentLetter)) && (currentLetter >= 32)){
                     result.insert({locationKey, tempEq});
                     tempEq = "";
                     locationKey++;
@@ -69,8 +69,8 @@ std::unordered_map<std::size_t, std::string> inputOrganization::calculationSpeci
                 if((currentLetter != '=') && (currentLetter >= 32)){
                     result.insert({locationKey, tempEq});
                     tempEq = "";
-                    inputOrganization::setComparisonLocation(locationKey);
-                    inputOrganization::appendComparisonLocationList(locationKey);
+                    InputOrganization::setComparisonLocation(locationKey);
+                    InputOrganization::appendComparisonLocationList(locationKey);
                     hasComparison = true;
                     locationKey++;
                 }
@@ -78,8 +78,8 @@ std::unordered_map<std::size_t, std::string> inputOrganization::calculationSpeci
                 if((currentLetter != '=') && (currentLetter >= 32)){
                     result.insert({locationKey, tempEq});
                     tempEq = "";
-                    inputOrganization::setComparisonLocation(locationKey);
-                    inputOrganization::appendComparisonLocationList(locationKey);
+                    InputOrganization::setComparisonLocation(locationKey);
+                    InputOrganization::appendComparisonLocationList(locationKey);
                     hasComparison = true;
                     locationKey++;
                 }
@@ -87,36 +87,36 @@ std::unordered_map<std::size_t, std::string> inputOrganization::calculationSpeci
                 if((currentLetter != '=') && (currentLetter >= 32)){
                     result.insert({locationKey, tempEq});
                     tempEq = "";
-                    inputOrganization::setComparisonLocation(locationKey);
-                    inputOrganization::appendComparisonLocationList(locationKey);
+                    InputOrganization::setComparisonLocation(locationKey);
+                    InputOrganization::appendComparisonLocationList(locationKey);
                     hasComparison = true;
                     locationKey++;
                 }
-            } else if((!inputOrganization::isNumberComp(lastLetter)) && (lastLetter >= 32)){
-                if(inputOrganization::isNumberComp(currentLetter)){
+            } else if((!InputOrganization::isNumberComp(lastLetter)) && (lastLetter >= 32)){
+                if(InputOrganization::isNumberComp(currentLetter)){
                     result.insert({locationKey, tempEq});
                     tempEq = "";
                     locationKey++;
-                } else if (inputOrganization::isComparisonOperator(currentLetter)){
+                } else if (InputOrganization::isComparisonOperator(currentLetter)){
                     result.insert({locationKey, tempEq});
                     tempEq = "";
-                    inputOrganization::setComparisonLocation(locationKey);
-                    inputOrganization::appendComparisonLocationList(locationKey);
+                    InputOrganization::setComparisonLocation(locationKey);
+                    InputOrganization::appendComparisonLocationList(locationKey);
                     hasComparison = true;
                     locationKey++;
                 }
             } else if((currentLetter == '+') || (currentLetter == '-')){
-                if((inputOrganization::isMathOperator(lastLetter)) || (inputOrganization::isComparisonOperator(lastLetter)) || (inputOrganization::isParenthesis(lastLetter))){
+                if((InputOrganization::isMathOperator(lastLetter)) || (InputOrganization::isComparisonOperator(lastLetter)) || (InputOrganization::isParenthesis(lastLetter))){
                     result.insert({locationKey, tempEq});
                     tempEq = "";
-                    if(inputOrganization::isComparisonOperator(lastLetter)){
-                        inputOrganization::setComparisonLocation(locationKey);
-                        inputOrganization::appendComparisonLocationList(locationKey);
+                    if(InputOrganization::isComparisonOperator(lastLetter)){
+                        InputOrganization::setComparisonLocation(locationKey);
+                        InputOrganization::appendComparisonLocationList(locationKey);
                         hasComparison = true;
                     }
                     locationKey++;
                 }
-            } else if(inputOrganization::isComparisonOperator(currentLetter)){
+            } else if(InputOrganization::isComparisonOperator(currentLetter)){
                 if(lastLetter == '!'){
                     result.insert({locationKey, tempEq});
                     tempEq = "";
@@ -132,12 +132,12 @@ std::unordered_map<std::size_t, std::string> inputOrganization::calculationSpeci
         }
     }
     if(!hasComparison){
-        inputOrganization::setComparisonLocation(0);
+        InputOrganization::setComparisonLocation(0);
     }
     return result;
 }
 
-std::vector<std::string> inputOrganization::returnOrderedFormula(std::unordered_map<std::size_t, std::string> &input){
+std::vector<std::string> InputOrganization::returnOrderedFormula(std::unordered_map<std::size_t, std::string> &input){
     std::vector<std::string> calcFlg2;
     calcFlg2.reserve(input.size());
     for(std::size_t i = 0; i < input.size(); i++){
