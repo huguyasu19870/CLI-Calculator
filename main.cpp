@@ -15,10 +15,10 @@
 
 int main()
 {
-    inputOrganization inOrg;
+    InputOrganization inOrg;
     TypeConvert TC;
     CalculationLogic CL;
-    calcTest CT;
+    CalcTest CT;
 
     std::string inputValue;
     bool debugMode = false;
