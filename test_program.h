@@ -4,7 +4,7 @@
 #include <array>
 #include <chrono>
 
-class calcTest{
+class CalcTest{
 public:
     void testValidation();
     void finalTestValidation();
