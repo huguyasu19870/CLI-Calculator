@@ -4,7 +4,7 @@
 #include <stdexcept>
 #include <iostream>
 
-std::array<std::string, 5> calcTest::simpleIntegerOperationTestCases(int testOps){
+std::array<std::string, 5> CalcTest::simpleIntegerOperationTestCases(int testOps){
     std::array<std::string, 5> additionCase = {"2+2", "75+96", "279+338", "6789+1245","27985+75831"};
     std::array<std::string, 5> subtractionCase = {"7-6","10-24","305-208","5780-3489","70935-64325"};
     std::array<std::string, 5> multiplicationCase = {"3*8", "13*75", "706*973", "4608*6703", "10937*43795"};
@@ -42,7 +42,7 @@ std::array<std::string, 5> calcTest::simpleIntegerOperationTestCases(int testOps
     }
     return result;
 }
-std::array<int, 5> calcTest::simpleIntegerOperationTestAnswer(int testOps){
+std::array<int, 5> CalcTest::simpleIntegerOperationTestAnswer(int testOps){
     std::array<int, 5> additionAnswer = {4,171, 617, 8034,103816};
     std::array<int, 5> subtractionAnswer = {1, -14, 97, 2291, 6610};
     std::array<int, 5> multiplicationAnswer = {24, 975, 686938, 30887424, 478985915};
@@ -81,7 +81,7 @@ std::array<int, 5> calcTest::simpleIntegerOperationTestAnswer(int testOps){
     return result;
 }
 
-std::array<bool, 5> calcTest::simpleIntegerComparisonTestAnswer(int testOps){
+std::array<bool, 5> CalcTest::simpleIntegerComparisonTestAnswer(int testOps){
     std::array<bool, 5> simpleComparisonAnswer = {true, false, false, true, false};
     std::array<bool, 5> calcComparisonAnswer = {false, false, false, true, false};
     std::array<bool, 5> result;
@@ -96,8 +96,8 @@ std::array<bool, 5> calcTest::simpleIntegerComparisonTestAnswer(int testOps){
     return result;
 }
 
-void calcTest::finalTestValidation(){
-    std::array<bool, 8> testResult = calcTest::getSimpleResultArray();
+void CalcTest::finalTestValidation(){
+    std::array<bool, 8> testResult = CalcTest::getSimpleResultArray();
     int falseDetect = -1;
     for(int i = 0; i < testResult.size(); i++){
         if(testResult[i] == false){
@@ -128,9 +128,10 @@ void calcTest::finalTestValidation(){
         std::cout << "Test result red." << std::endl;
         std::cout << "Error trippied at " << errorLoc << std::endl;
     }
-    calcTest::setFinishClock();
-    auto start = calcTest::getStartClock();
-    auto finish = calcTest::getFinishClock();
+    CalcTest::setFinishClock();
+    auto start = CalcTest::getStartClock();
+    auto finish = CalcTest::getFinishClock();
     double elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(finish-start).count();
     std::cout << "Test Duration is " << elapsedTime << "ms." << std::endl;
 }
+
