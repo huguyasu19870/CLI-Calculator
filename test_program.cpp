@@ -126,7 +126,7 @@ void CalcTest::finalTestValidation(){
         std::cout << "Test result green." << std::endl;
     } else {
         std::cout << "Test result red." << std::endl;
-        std::cout << "Error trippied at " << errorLoc << std::endl;
+        std::cout << "Error tripped at " << errorLoc << std::endl;
     }
     CalcTest::setFinishClock();
     auto start = CalcTest::getStartClock();
