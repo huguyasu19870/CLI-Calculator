@@ -11,7 +11,7 @@ Version 1 can handle exponent, factorial, multiplication, division, addition, su
 It is also important to note that formula/equation must be correct, otherwise it may output incorrect result or break the program.
 
 
--- Version 2
+-- Version 2 (releases)
 
 In Version 2, minor mistake in formula would be corrected through additional programming.
 
