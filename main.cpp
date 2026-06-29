@@ -85,8 +85,7 @@ testInit:
         }
         inputValue = testArray[testPhase];
     }
-    std::unordered_map<std::size_t, std::string> calcFlg = inOrg.calculationSpecifier(inputValue);
-    std::vector<std::string> calcFlg2 = inOrg.returnOrderedFormula(calcFlg);
+    std::vector<std::string> calcFlg2 = inOrg.calculationSpecifier(inputValue);
     for(int i = 0; i < calcFlg2.size(); i++){
         std::string elem = calcFlg2[i];
         //std::cout << "[Debug] function main's elements of calcFlg2 is: " << elem << std::endl;
