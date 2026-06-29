@@ -137,18 +137,36 @@ std::vector<std::string> InputOrganization::calculationSpecifier(std::string &in
     }
     std::vector<std::string> correctedResult;
     correctedResult.reserve(result.size());
+    bool isNextNegative = false;
     for(std::size_t i = 0; i < result.size(); i++){
         std::string currentCalc = result[i];
         int currentCalcLength = currentCalc.length();
+        if(isNextNegative){
+            currentCalc = "-" + currentCalc;
+        }
+        isNextNegative = false;
         if(currentCalcLength > 1){
-            if((currentCalc[0] == '*') && (currentCalc != "*-")){
-                if((currentCalcLength % 2) == 0){
-                    currentCalc = "^";
+            if(currentCalc[0] == '*'){
+                if(currentCalc.find("-") != std::string::npos){
+                    isNextNegative = true;
+                    if((currentCalcLength-1 % 2) == 0){
+                        currentCalc = "^";
+                    } else {
+                        currentCalc = "*";
+                    }
                 } else {
-                    currentCalc = "*";
+                    if((currentCalcLength % 2) == 0){
+                        currentCalc = "^";
+                    } else {
+                        currentCalc = "*";
+                    }
                 }
+
             } else if(currentCalc[0] == '<'){
                 if((currentCalc != "<=") && (currentCalc != "=<")){
+                    if(currentCalc.find("-") != std::string::npos){
+                        isNextNegative = true;
+                    }
                     if(currentCalc.find("=") != std::string::npos){
                         currentCalc = "<=";
                     } else if(currentCalc.find("=") == std::string::npos){
@@ -159,6 +177,9 @@ std::vector<std::string> InputOrganization::calculationSpecifier(std::string &in
                 }
             } else if(currentCalc[0] == '>'){
                 if((currentCalc != ">=") || (currentCalc != "=>")){
+                    if(currentCalc.find("-") != std::string::npos){
+                        isNextNegative = true;
+                    }
                     if(currentCalc.find("=") != std::string::npos){
                         currentCalc = ">=";
                     } else if(currentCalc.find("=") == std::string::npos){
@@ -167,17 +188,30 @@ std::vector<std::string> InputOrganization::calculationSpecifier(std::string &in
                 } else if(currentCalc == "=>"){
                     currentCalc = ">=";
                 }
-            } else if((currentCalc[0] == '+')&& (currentCalc != "+-")){
+            } else if(currentCalc[0] == '+'){
+                if(currentCalc.find("-") != std::string::npos){
+                    isNextNegative = true;
+                }
                 currentCalc = "+";
-            } else if((currentCalc[0] == '-') && (currentCalc != "--")){
+            } else if(currentCalc[0] == '-'){
+                isNextNegative = true;
                 currentCalc = "-";
-            } else if((currentCalc[0] == '/') && (currentCalc != "/-")){
+            } else if(currentCalc[0] == '/'){
+                if(currentCalc.find("-") != std::string::npos){
+                    isNextNegative = true;
+                }
                 if(true){
                     currentCalc = "/";
                 }
-            } else if((currentCalc[0] == '^') && (currentCalc != "^-")){
+            } else if(currentCalc[0] == '^'){
+                if(currentCalc.find("-") != std::string::npos){
+                    isNextNegative = true;
+                }
                 currentCalc = "^";
             } else if(currentCalc[0] == '='){
+                if(currentCalc.find("-") != std::string::npos){
+                    isNextNegative = true;
+                }
                 currentCalc = "==";
             }
         }
