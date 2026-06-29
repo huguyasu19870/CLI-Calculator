@@ -141,7 +141,7 @@ std::vector<std::string> InputOrganization::calculationSpecifier(std::string &in
         std::string currentCalc = result[i];
         int currentCalcLength = currentCalc.length();
         if(currentCalcLength > 1){
-            if(currentCalc[0] == '*'){
+            if((currentCalc[0] == '*') && (currentCalc != "*-")){
                 if((currentCalcLength % 2) == 0){
                     currentCalc = "^";
                 } else {
@@ -167,15 +167,15 @@ std::vector<std::string> InputOrganization::calculationSpecifier(std::string &in
                 } else if(currentCalc == "=>"){
                     currentCalc = ">=";
                 }
-            } else if(currentCalc[0] == '+'){
+            } else if((currentCalc[0] == '+')&& (currentCalc != "+-")){
                 currentCalc = "+";
-            } else if(currentCalc[0] == '-'){
+            } else if((currentCalc[0] == '-') && (currentCalc != "--")){
                 currentCalc = "-";
-            } else if(currentCalc[0] == '/'){
+            } else if((currentCalc[0] == '/') && (currentCalc != "/-")){
                 if(true){
                     currentCalc = "/";
                 }
-            } else if(currentCalc[0] == '^'){
+            } else if((currentCalc[0] == '^') && (currentCalc != "^-")){
                 currentCalc = "^";
             } else if(currentCalc[0] == '='){
                 currentCalc = "==";
