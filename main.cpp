@@ -7,11 +7,13 @@
 #include <array>
 #include <algorithm>
 #include <cstddef>
+#include <regex>
 #include "main.h"
 #include "operation.h"
 #include "input_cleaner.h"
 #include "test_program.h"
 #include "calculation_Logic.h"
+#include "debug_Handler.h"
 
 int main()
 {
@@ -19,14 +21,11 @@ int main()
     TypeConvert TC;
     CalculationLogic CL;
     CalcTest CT;
+    DebugArea DA;
 
     std::string inputValue;
-    bool debugMode = false;
     bool testMode = false;
     bool shouldEnd = false;
-    #ifdef DEBUG
-        debugMode = true;
-    #endif // DEBUG
 reInput:
     std::cout << "Please input the equation." << std::endl;
     std::cout << "If you want to end this program, type \"Quit \" or \"Exit\"." << std::endl;
@@ -34,15 +33,31 @@ reInput:
     if(inputValue.empty()){
         std::cout << "Provided input was empty." << std::endl;
         goto reInput;
-    } else if((inputValue == "exit") || (inputValue == "Exit") || (inputValue == "quit") || (inputValue == "Quit")){
+    } else if(std::regex_match(inputValue, std::regex("exit", std::regex_constants::icase)) || (std::regex_match(inputValue, std::regex("quit", std::regex_constants::icase)))){
         std::cout << "Exit command received.";
         std::this_thread::sleep_for(std::chrono::milliseconds(500));
         shouldEnd = true;
         return 0;
-    } else if((inputValue == "test") || (inputValue == "Test")){
+    } else if(std::regex_match(inputValue, std::regex("test", std::regex_constants::icase))){
         CT.setStartClock();
         testMode = true;
         goto testInit;
+    } else if(((std::regex_match(inputValue, std::regex("debug", std::regex_constants::icase))) && !DA.getDebugMode()) || std::regex_match(inputValue, std::regex("debug enable", std::regex_constants::icase))){
+        std::cout << "Enabling Debug Statement" << std::endl;
+        DA.enableDebugMode();
+        std::this_thread::sleep_for(std::chrono::milliseconds(200));
+        goto reInput;
+    } else if((std::regex_match(inputValue, std::regex("debug", std::regex_constants::icase)) && DA.getDebugMode()) || std::regex_match(inputValue, std::regex("debug disable", std::regex_constants::icase))){
+        std::cout << "Disabling Debug Statement" << std::endl;
+        DA.disableDebugMode();
+        std::this_thread::sleep_for(std::chrono::milliseconds(200));
+        goto reInput;
+    } else if(std::regex_match(inputValue, std::regex("setting", std::regex_constants::icase)) || std::regex_match(inputValue, std::regex("debug setting", std::regex_constants::icase))){
+        DA.askDebugMode(false);
+        goto reInput;
+    } else if(std::regex_match(inputValue, std::regex("detail", std::regex_constants::icase)) || std::regex_match(inputValue, std::regex("debug detail", std::regex_constants::icase))){
+        DA.askDebugMode(true);
+        goto reInput;
     }
     inputValue = inOrg.inputCleaner(inputValue);
     if(inputValue.empty()){
@@ -59,6 +74,7 @@ nullOutput:
             return 1;
         }
 testInit:
+    DA.confirmDebugMode();
     if(testMode){
         int testOp = CT.getTestOps();
         int testPhase = CT.getTestNum();
@@ -70,8 +86,6 @@ testInit:
         inputValue = testArray[testPhase];
     }
     std::unordered_map<std::size_t, std::string> calcFlg = inOrg.calculationSpecifier(inputValue);
-//    std::unordered_map<unsigned long long int, unsigned long long int> location = inOrg.getOopLocation();
-//    unsigned long long int delCount = 0;
     std::vector<std::string> calcFlg2 = inOrg.returnOrderedFormula(calcFlg);
     for(int i = 0; i < calcFlg2.size(); i++){
         std::string elem = calcFlg2[i];
