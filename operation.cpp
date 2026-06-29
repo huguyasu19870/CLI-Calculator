@@ -5,9 +5,11 @@
 #include <iostream>
 #include "operation.h"
 #include "input_cleaner.h"
+#include "debug_Handler.h"
 
 int SimpleOperation::factorialOp(int a){
-    //std::cout << "[Debug] function factorialOp's variable a is: " << a << std::endl;
+    FlexibleVariableCout<OperationDebugTarget, int> FVC;
+    FVC.variableDebugOutput(DebugSources::Operation, OperationDebugTarget::Factorial, a);
     bool isInputNegative = false;
     if(a == 0){
         return 1;
@@ -28,6 +30,9 @@ int SimpleOperation::factorialOp(int a){
     return result;
 }
 int SimpleOperation::exponentOp(int a, int b){
+    FlexibleVariableCout<OperationDebugTarget, int> FVC;
+    FVC.variableDebugOutput(DebugSources::Operation, OperationDebugTarget::Exponent, a);
+    FVC.variableDebugOutput(DebugSources::Operation, OperationDebugTarget::Exponent, b);
     if(b == 0){
         return 1;
     }
