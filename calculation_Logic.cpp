@@ -8,35 +8,26 @@
 #include "operation.h"
 #include "input_cleaner.h"
 #include "calculation_Logic.h"
+#include "debug_handler.h"
 
 std::vector<std::string> CalculationLogic::calcLogic(const std::vector<std::string> &input){
     TypeConvert TC;
     SimpleOperation SO;
+    FlexibleVariableCout<CalcLogicDebugTarget, std::string> FVCS;
+    FlexibleVariableCout<CalcLogicDebugTarget, std::vector<std::string> > FVCVS;
     std::string currentCalc;
     int calcTemp;
-    #ifdef DEBUG
-        for(const auto& elem : input){
-            std::cout << "[Debug] function calcLogic's input components is " << elem << std::endl;
-        }
-    #endif // DEBUG
-    //std::cout << "[Debug] function calcOps's variable compLoc is :" << compLoc << std::endl;
-
+    FVCVS.iterableDebugOutput(DebugSources::CalcLogic, CalcLogicDebugTarget::CalcLogicInput, input);
 
     std::vector<std::string> inputVector = input;
     std::vector<std::string> tempVector;
     tempVector.reserve(input.size());
     auto factorialFind = std::find(inputVector.begin(), inputVector.end(), "!");
-    #ifdef DEBUG
-                std::cout << 0 << std::endl;
-    #endif // DEBUG
+    FVCS.variableDebugOutput(DebugSources::CalcLogic, CalcLogicDebugTarget::FactorialLoopBegin, "$");
     if(factorialFind != inputVector.end()){
         for(std::size_t i = 0; i < inputVector.size(); i++){
-            /*
-            #ifdef DEBUG
-                std::cout << "fact " << i << '|' << inputVector[i]<< std::endl;
-            #endif // DEBUG
-            */
             currentCalc = inputVector[i];
+            FVCS.variableDebugOutput(DebugSources::CalcLogic, CalcLogicDebugTarget::FactorialLoopInput, currentCalc);
             if(currentCalc == "!"){
                 calcTemp = SO.factorialOp(TC.letterToInt(inputVector[i-1]));
                 tempVector.push_back(std::to_string(calcTemp));
@@ -56,17 +47,11 @@ std::vector<std::string> CalculationLogic::calcLogic(const std::vector<std::stri
         tempVector.clear();
     }
     auto expFind = std::find(inputVector.begin(), inputVector.end(), "^");
-    #ifdef DEBUG
-        std::cout << 10 << std::endl;
-    #endif // DEBUG
+    FVCS.variableDebugOutput(DebugSources::CalcLogic, CalcLogicDebugTarget::ExponentLoopBegin, "$");
     if(expFind != inputVector.end()){
         for(std::size_t i = 0; i < inputVector.size(); i++){
-            /*
-            #ifdef DEBUG
-                std::cout << "exp " << i << '|' << inputVector[i]<< std::endl;
-            #endif // DEBUG
-            */
             currentCalc = inputVector[i];
+            FVCS.variableDebugOutput(DebugSources::CalcLogic, CalcLogicDebugTarget::ExponentLoopInput, currentCalc);
             if(currentCalc == "^"){
                 calcTemp = SO.exponentOp(TC.letterToInt(inputVector[i-1]), TC.letterToInt(inputVector[i+1]));
                 tempVector.push_back(std::to_string(calcTemp));
@@ -93,17 +78,11 @@ std::vector<std::string> CalculationLogic::calcLogic(const std::vector<std::stri
 
     auto multiFind = std::find(inputVector.begin(), inputVector.end(), "*");
     auto divFind = std::find(inputVector.begin(), inputVector.end(), "/");
-    #ifdef DEBUG
-        std::cout << 20 << std::endl;
-    #endif // DEBUG
+    FVCS.variableDebugOutput(DebugSources::CalcLogic, CalcLogicDebugTarget::MulDivLoopBegin, "$");
     if((multiFind != inputVector.end()) || (divFind != inputVector.end())){
         for(std::size_t i = 0; i < inputVector.size(); i++){
-            /*
-            #ifdef DEBUG
-                std::cout << "muldiv " << i << '|' << inputVector[i] << std::endl;
-            #endif // DEBUG
-            */
             currentCalc = inputVector[i];
+            FVCS.variableDebugOutput(DebugSources::CalcLogic,CalcLogicDebugTarget::MulDivLoopInput, currentCalc);
             if(currentCalc == "*"){
                 calcTemp = TC.letterToInt(inputVector[i-1]) * TC.letterToInt(inputVector[i+1]);
                 tempVector.push_back(std::to_string(calcTemp));
@@ -143,17 +122,11 @@ std::vector<std::string> CalculationLogic::calcLogic(const std::vector<std::stri
     }
     auto addFind = std::find(inputVector.begin(), inputVector.end(), "+");
     auto subFind = std::find(inputVector.begin(), inputVector.end(), "-");
-    #ifdef DEBUG
-        std::cout << 30 << std::endl;
-    #endif // DEBUG
+    FVCS.variableDebugOutput(DebugSources::CalcLogic, CalcLogicDebugTarget::AddSubLoopBegin, "$");
     if((addFind != inputVector.end()) || (subFind != inputVector.end())){
         for(std::size_t i = 0; i < inputVector.size(); i++){
-            /*
-            #ifdef DEBUG
-                std::cout << "addsub " << i << '|' << inputVector[i]<< std::endl;
-            #endif // DEBUG
-            */
             currentCalc = inputVector[i];
+            FVCS.variableDebugOutput(DebugSources::CalcLogic, CalcLogicDebugTarget::AddSubLoopInput, currentCalc);
             if(currentCalc == "+"){
                 calcTemp = TC.letterToInt(inputVector[i-1]) + TC.letterToInt(inputVector[i+1]);
                 tempVector.push_back(std::to_string(calcTemp));
@@ -182,9 +155,7 @@ std::vector<std::string> CalculationLogic::calcLogic(const std::vector<std::stri
         tempVector.clear();
     }
 
-    #ifdef DEBUG
-        std::cout << 40 << std::endl;
-    #endif // DEBUG
+    FVCS.variableDebugOutput(DebugSources::CalcLogic, CalcLogicDebugTarget::CalcLoopEnd, "$");
     return inputVector;
 }
 
