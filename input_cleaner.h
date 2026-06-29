@@ -8,21 +8,12 @@
 class InputOrganization{
 public:
     std::string inputCleaner(std::string &input);
-    std::unordered_map<std::size_t, std::string> calculationSpecifier(std::string &input);
-    std::vector<std::vector<std::size_t> > operationLocator(std::string input);
-    std::vector<std::string> returnOrderedFormula(std::unordered_map<std::size_t, std::string> &input);
+    std::vector<std::string> calculationSpecifier(std::string &input);
     bool isNumberComp(char &input);
     bool isMathOperator(char &input);
     bool isComparisonOperator(char &input);
     bool isParenthesis(char &input);
     bool isAlphabet(char &input);
-    /*
-    std::unordered_map<unsigned long long int, unsigned long long int> getOopLocation(){
-        return const &oopLocation;
-    };
-    void appendOopLocation(unsigned long long int a, unsigned long long int b){
-        oopLocation.insert({a,b});
-    };*/
     unsigned long long int& getComparisonLocation(){
         return comparisonLocation;
     };
@@ -36,7 +27,6 @@ public:
         comparisonLocationList.push_back(input);
     }
 private:
-    //std::unordered_map<unsigned long long int, unsigned long long int> oopLocation;
     inline static unsigned long long int comparisonLocation = 0;
     inline static std::vector<std::size_t> comparisonLocationList;
 };
