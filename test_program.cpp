@@ -4,16 +4,16 @@
 #include <stdexcept>
 #include <iostream>
 
-std::array<std::string, 5> CalcTest::simpleIntegerOperationTestCases(int testOps){
-    std::array<std::string, 5> additionCase = {"2+2", "75+96", "279+338", "6789+1245","27985+75831"};
-    std::array<std::string, 5> subtractionCase = {"7-6","10-24","305-208","5780-3489","70935-64325"};
-    std::array<std::string, 5> multiplicationCase = {"3*8", "13*75", "706*973", "4608*6703", "10937*43795"};
-    std::array<std::string, 5> divisionCase = {"6/2", "35/5", "288/4", "5075/5", "59732/2"};
-    std::array<std::string, 5> exponentCase = {"4^2", "20^3", "243^3", "3876^2", "10342^2"};
-    std::array<std::string, 5> factorialCase = {"2!", "4!", "7!", "10!", "12!"};
-    std::array<std::string, 5> simpleComparisonCase = {"7<9", "75<=42", "94>150", "76>=37", "2778=377"};
-    std::array<std::string, 5> calcComparisonCase = {"7+6<9*6", "16*27<=7!", "24^7>273*102", "6!>=75*30", "1783+1094=73*25"};
-    std::array<std::string, 5> result;
+std::array<std::string, 10> CalcTest::simpleIntegerOperationTestCases(int testOps){
+    std::array<std::string, 10> additionCase = {"154320+412819", "-9845+15321", "1500000000+647483640", "-450000+-250000", "2147483640+5", "2000000000+-1500000000", "0+-1234567", "888888+-888888", "999999+1", "2147483645+-2"};
+    std::array<std::string, 10> subtractionCase = {"2000000000-850500123", "1456789012-56789013", "2147483640-1000000000", "876543210-432109876", "1073741824-536870912", "999999999-123456789", "1500000000-750000000", "2100500000-100500000", "500000005-6", "1234567890-1234567880"};
+    std::array<std::string, 10> multiplicationCase = {"45132*8204", "125000*4500", "12345*9876", "999999*2147", "55555*33333", "2000000*1050", "14285*7000", "67890*12345", "3141592*500", "46340*46340"};
+    std::array<std::string, 10> divisionCase = {"142666137/6471", "1362033702/41466", "471087200/11104", "1174640214/28501", "364827670/8230", "1543934985/33745", "1715024259/44019", "1228789296/33732", "765788239/41441", "14376496/1013"};
+    std::array<std::string, 10> exponentCase = {"3^5", "2^10", "7^4", "12^3", "5^6", "2^30", "6^5", "15^4", "4^9", "11^5"};
+    std::array<std::string, 10> factorialCase = {"1!", "2!", "3!", "4!", "5!", "6!", "7!", "8!", "10!", "12!"};
+    std::array<std::string, 10> simpleComparisonCase = {"-439262515 < 1446625053", "684101282 < 761020855", "1303488738 <= 1926658560", "-779116518 <= 685704327", "-1214867088 > -1613113628", "1995851392 > 71948606", "190510544 >= 1974795550", "1703630796 >= 234296320", "404775551 == -187336658", "-2129266502 == 831759369"};
+    std::array<std::string, 10> calcComparisonCase = {"15*400+350 > 12*500-150", "-125*8+4500 < 250*4+2000", "850000/12 <= 120000-86000", "12^3+272 > 40*50", "5500/11+4500 == 100*50", "3^4*100 <= 15000-2300*3", "2^16 < 30000*2", "9999*5-5 > 100000/2", "5^6 > 4^7", "1500000000-800000000 < 350000*2000"};
+    std::array<std::string, 10> result;
     switch(testOps){
     case 0:
         result = factorialCase;
@@ -42,16 +42,16 @@ std::array<std::string, 5> CalcTest::simpleIntegerOperationTestCases(int testOps
     }
     return result;
 }
-std::array<int, 5> CalcTest::simpleIntegerOperationTestAnswer(int testOps){
-    std::array<int, 5> additionAnswer = {4,171, 617, 8034,103816};
-    std::array<int, 5> subtractionAnswer = {1, -14, 97, 2291, 6610};
-    std::array<int, 5> multiplicationAnswer = {24, 975, 686938, 30887424, 478985915};
-    std::array<int, 5> divisionAnswer = {3, 7, 72, 1015, 29866};
-    std::array<int, 5> exponentAnswer = {16, 8000, 14348907, 15023376, 106956964};
-    std::array<int, 5> factorialAnswer = {2, 24, 5040, 3628800, 479001600};
-    std::array<int, 5> simpleComparisonAnswer = {1, 0, 0, 1, 0};
-    std::array<int, 5> calcComparisonAnswer = {1, 1, 1, 0, 0};
-    std::array<int, 5> result;
+std::array<int, 10> CalcTest::simpleIntegerOperationTestAnswer(int testOps){
+    std::array<int, 10> additionAnswer = {567139, 5476, 2147483640, -700000, 2147483645, 500000000, -1234567, 0, 1000000, 2147483643};
+    std::array<int, 10> subtractionAnswer = {1149499877, 1399999999, 1147483640, 444433334, 536870912, 876543210, 750000000, 2000000000, 499999999, 10};
+    std::array<int, 10> multiplicationAnswer = {370262928, 562500000, 121919220, 2146997853, 1851814815, 2100000000, 99995000, 838102050, 1570796000, 2147395600};
+    std::array<int, 10> divisionAnswer = {22047, 32847, 42425, 41214, 44329, 45753, 38961, 36428, 18479, 14192};
+    std::array<int, 10> exponentAnswer = {243, 1024, 2401, 1728, 15625, 1073741824, 7776, 50625, 262144, 161051};
+    std::array<int, 10> factorialAnswer = {1, 2, 6, 24, 120, 720, 5040, 40320, 3628800, 479001600};
+    std::array<int, 10> simpleComparisonAnswer = {1, 1, 1, 1, 1, 1, 0, 1, 0, 0};
+    std::array<int, 10> calcComparisonAnswer = {1, 0, 0, 0, 1, 1, 0, 0, 0, 0};
+    std::array<int, 10> result;
     switch(testOps){
     case 0:
         result = factorialAnswer;
@@ -71,21 +71,6 @@ std::array<int, 5> CalcTest::simpleIntegerOperationTestAnswer(int testOps){
     case 5:
         result = subtractionAnswer;
         break;
-    case 6:
-        result = simpleComparisonAnswer;
-        break;
-    case 7:
-        result = calcComparisonAnswer;
-        break;
-    }
-    return result;
-}
-
-std::array<bool, 5> CalcTest::simpleIntegerComparisonTestAnswer(int testOps){
-    std::array<bool, 5> simpleComparisonAnswer = {true, false, false, true, false};
-    std::array<bool, 5> calcComparisonAnswer = {false, false, false, true, false};
-    std::array<bool, 5> result;
-    switch(testOps){
     case 6:
         result = simpleComparisonAnswer;
         break;
@@ -134,4 +119,3 @@ void CalcTest::finalTestValidation(){
     double elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(finish-start).count();
     std::cout << "Test Duration is " << elapsedTime << "ms." << std::endl;
 }
-

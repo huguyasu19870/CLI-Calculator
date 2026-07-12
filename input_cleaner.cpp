@@ -1,11 +1,12 @@
 #include <string>
-#include <unordered_map>
 #include <vector>
 #include <climits>
 #include <iostream>
 #include <cstddef>
+#include <type_traits>
 #include "input_cleaner.h"
 #include "operation.h"
+#include "debug_Handler.h"
 
 bool InputOrganization::isNumberComp(char &in){
     return (((in >= '0') && (in <= '9')) || (in == '.'));
@@ -17,7 +18,7 @@ bool InputOrganization::isParenthesis(char &in){
     return ((in == '(') || (in == ')') || (in == '[') || (in == ']') || (in == '{') || (in == '}') || (in == '|'));
 }
 bool InputOrganization::isAlphabet(char &in){
-    return (((in >= 'A') && (in == 'Z')) || ((in >= 'a') && (in <= 'z')));
+    return (((in >= 'A') && (in <= 'Z')) || ((in >= 'a') && (in <= 'z')));
 }
 bool InputOrganization::isComparisonOperator(char &in){
     return ((in == '<') || (in == '>') || (in == '=') || (in == '~'));
@@ -28,7 +29,7 @@ std::string InputOrganization::inputCleaner(std::string &input){
     for(std::size_t i = 0; i < input.length(); i++){
         char currentLetter = input[i];
         //V1: If letter of input[i] is number or symbol used in mathematics, then add them into output string.
-        if(InputOrganization::isNumberComp(currentLetter) || InputOrganization::isMathOperator(currentLetter) || InputOrganization::isComparisonOperator(currentLetter)){
+        if((InputOrganization::isNumberComp(currentLetter) || InputOrganization::isMathOperator(currentLetter) || InputOrganization::isComparisonOperator(currentLetter)) && (currentLetter != ' ')){
             equationOutput += currentLetter;
         }
     }
@@ -43,6 +44,7 @@ std::vector<std::string> InputOrganization::calculationSpecifier(std::string &in
     std::string tempEq = "";
     char currentLetter;
     char lastLetter;
+    char thirdLetter;
     std::size_t locationKey = 0;
     bool hasComparison = false;
     for(std::size_t i = 0; i < input.length(); i++){
@@ -54,20 +56,34 @@ std::vector<std::string> InputOrganization::calculationSpecifier(std::string &in
             } else {
                 lastLetter = input[i-1];
             }
+            if(i < 2){
+                thirdLetter = 0;
+            } else {
+                thirdLetter = input[i-2];
+            }
+            if(i == 1){
+                if((lastLetter == '-') && InputOrganization::isNumberComp(currentLetter)){
+                    tempEq += currentLetter;
+                    continue;
+                }
+            }
+            if(currentLetter == 32){
+                continue;
+            }
             if(InputOrganization::isNumberComp(lastLetter)){
-                if((!InputOrganization::isNumberComp(currentLetter)) && (currentLetter >= 32)){
+                if((!InputOrganization::isNumberComp(currentLetter)) && (currentLetter > 32)){
                     result.push_back(tempEq);
                     tempEq = "";
                     locationKey++;
                 }
             } else if(lastLetter == '/'){
-                if((currentLetter != '=') && (currentLetter >= 32)){
+                if((currentLetter != '=') && (currentLetter > 32)){
                     result.push_back(tempEq);
                     tempEq = "";
                     locationKey++;
                 }
             } else if(lastLetter == '<'){
-                if((currentLetter != '=') && (currentLetter >= 32)){
+                if((currentLetter != '=') && (currentLetter > 32)){
                     result.push_back(tempEq);
                     tempEq = "";
                     InputOrganization::setComparisonLocation(locationKey);
@@ -76,7 +92,7 @@ std::vector<std::string> InputOrganization::calculationSpecifier(std::string &in
                     locationKey++;
                 }
             } else if(lastLetter == '>'){
-                if((currentLetter != '=') && (currentLetter >= 32)){
+                if((currentLetter != '=') && (currentLetter > 32)){
                     result.push_back(tempEq);
                     tempEq = "";
                     InputOrganization::setComparisonLocation(locationKey);
@@ -85,7 +101,16 @@ std::vector<std::string> InputOrganization::calculationSpecifier(std::string &in
                     locationKey++;
                 }
             } else if(lastLetter == '~'){
-                if((currentLetter != '=') && (currentLetter >= 32)){
+                if((currentLetter != '=') && (currentLetter > 32)){
+                    result.push_back(tempEq);
+                    tempEq = "";
+                    InputOrganization::setComparisonLocation(locationKey);
+                    InputOrganization::appendComparisonLocationList(locationKey);
+                    hasComparison = true;
+                    locationKey++;
+                }
+            } else if(lastLetter == '='){
+                if(currentLetter != '='){
                     result.push_back(tempEq);
                     tempEq = "";
                     InputOrganization::setComparisonLocation(locationKey);
@@ -125,7 +150,9 @@ std::vector<std::string> InputOrganization::calculationSpecifier(std::string &in
                 }
             }
         }
-        tempEq += currentLetter;
+        if(currentLetter != 32){
+            tempEq += currentLetter;
+        }
         if(i == input.length()-1){
             //Funny thing is that I was stuck in debug because I didn't write this if.
             //Apperantly, I have thought all about interaction between numbers and mathematical operators, but not when string ends.
@@ -135,9 +162,12 @@ std::vector<std::string> InputOrganization::calculationSpecifier(std::string &in
     if(!hasComparison){
         InputOrganization::setComparisonLocation(0);
     }
+    FlexibleVariableCout<InputCleanerDebugTarget, std::vector<std::string> > FVC;
+    FVC.iterableDebugOutput(DebugSources::InputCleaner, InputCleanerDebugTarget::EndSplit, result);
     std::vector<std::string> correctedResult;
     correctedResult.reserve(result.size());
     bool isNextNegative = false;
+    std::string prevLetter;
     for(std::size_t i = 0; i < result.size(); i++){
         std::string currentCalc = result[i];
         int currentCalcLength = currentCalc.length();
@@ -161,7 +191,6 @@ std::vector<std::string> InputOrganization::calculationSpecifier(std::string &in
                         currentCalc = "*";
                     }
                 }
-
             } else if(currentCalc[0] == '<'){
                 if((currentCalc != "<=") && (currentCalc != "=<")){
                     if(currentCalc.find("-") != std::string::npos){
@@ -194,8 +223,10 @@ std::vector<std::string> InputOrganization::calculationSpecifier(std::string &in
                 }
                 currentCalc = "+";
             } else if(currentCalc[0] == '-'){
-                isNextNegative = true;
-                currentCalc = "-";
+                if(currentCalc[1] == '-'){
+                    isNextNegative = true;
+                    currentCalc = "-";
+                }
             } else if(currentCalc[0] == '/'){
                 if(currentCalc.find("-") != std::string::npos){
                     isNextNegative = true;
@@ -213,6 +244,8 @@ std::vector<std::string> InputOrganization::calculationSpecifier(std::string &in
                     isNextNegative = true;
                 }
                 currentCalc = "==";
+            } else if((currentCalc == "^ +$") || (currentCalc == "")){
+                continue;
             }
         }
         correctedResult.push_back(currentCalc);

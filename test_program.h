@@ -3,14 +3,14 @@
 #include <string>
 #include <array>
 #include <chrono>
+#include <algorithm>
 
 class CalcTest{
 public:
     void testValidation();
     void finalTestValidation();
-    std::array<std::string, 5> simpleIntegerOperationTestCases(int testOps);
-    std::array<int, 5> simpleIntegerOperationTestAnswer(int testOps);
-    std::array<bool, 5> simpleIntegerComparisonTestAnswer(int testOps);
+    std::array<std::string, 10> simpleIntegerOperationTestCases(int testOps);
+    std::array<int, 10> simpleIntegerOperationTestAnswer(int testOps);
     void incrementTestNum(){
         testNum++;
     };
@@ -44,10 +44,10 @@ public:
     void setTestType(int input){
         testType = input;
     }
-    std::array<bool, 5> getSimpleResultTempArray(){
+    std::array<bool, 10> getSimpleResultTempArray(){
         return simpleResultTempArray;
     };
-    void setSimpleResultTempArray(std::array<bool, 5> inputArray){
+    void setSimpleResultTempArray(std::array<bool, 10> inputArray){
         simpleResultTempArray = inputArray;
     };
     void clearSimpleResultTempArray(){
@@ -94,7 +94,7 @@ private:
     7 = Comparison(With calculation)
     */
     int testType = 0;
-    std::array<bool, 5> simpleResultTempArray = {0, 0, 0, 0, 0};
+    std::array<bool, 10> simpleResultTempArray = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     std::array<bool, 8> simpleResultArray = {0, 0, 0, 0, 0, 0, 0, 0};
     inline static std::chrono::system_clock::time_point startTime;
     inline static std::chrono::system_clock::time_point finishTime;

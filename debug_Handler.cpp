@@ -6,28 +6,37 @@
 #include <string>
 #include "debug_Handler.h"
 
-void DebugArea::selectDebugMode(DebugSources input, bool mode){
+bool DebugArea::checkDebugMode(){
     bool isDebugModeOn = DebugArea::getDebugMode();
     if(!isDebugModeOn){
-        std::cout << "Debug modes is not on!" << std::endl;
+        std::cout << "Debug mode is not on!" << std::endl;
+    }
+    return isDebugModeOn;
+}
+
+void DebugArea::selectDebugMode(DebugSources input, bool mode){
+    if(!DebugArea::checkDebugMode()){
         return;
     }
     uint8_t position = static_cast<uint8_t>(input);
     DebugArea::debugCategory[position] = mode;
 }
 void DebugArea::operationDebugMode(OperationDebugTarget input, bool mode){
-    bool isDebugModeOn = DebugArea::getDebugMode();
-    if(!isDebugModeOn){
-        std::cout << "Debug modes is not on!" << std::endl;
+    if(!DebugArea::checkDebugMode()){
         return;
     }
     uint8_t position = static_cast<uint8_t>(input);
     DebugArea::operationDebugCategory[position] = mode;
 }
+void DebugArea::inputCleanerDebugMode(InputCleanerDebugTarget input, bool mode){
+    if(!DebugArea::checkDebugMode()){
+        return;
+    }
+    uint8_t position = static_cast<uint8_t>(input);
+    DebugArea::inputCleanerDebugCategory[position] = mode;
+}
 void DebugArea::calcLogicDebugMode(CalcLogicDebugTarget input, bool mode){
-    bool isDebugModeOn = DebugArea::getDebugMode();
-    if(!isDebugModeOn){
-        std::cout << "Debug modes is not on!" << std::endl;
+    if(!DebugArea::checkDebugMode()){
         return;
     }
     uint8_t position = static_cast<uint8_t>(input);
@@ -60,7 +69,7 @@ void DebugArea::askDebugMode(bool askDetail){
                 continue;
             }
         }
-        if((!switchValue <= InvDebugSources.size()) && (switchValue < 1)){
+        if(((!switchValue) <= InvDebugSources.size()) && (switchValue < 1)){
             std::cout << "Input is incorrect. Try again." << std::endl;
         } else {
             shouldEnd = true;
@@ -182,6 +191,13 @@ void DebugArea::askDebugMode(bool askDetail){
     case 3:
         DebugArea::selectDebugMode(DebugSources::InputCleaner, true);
         break;
+        if(askDetail){
+            switch(detailValue){
+            case 1:
+                DebugArea::inputCleanerDebugMode(InputCleanerDebugTarget::EndSplit, true);
+                break;
+            }
+        }
     case 4:
         DebugArea::selectDebugMode(DebugSources::CalcLogic, true);
         if(askDetail){
@@ -226,42 +242,52 @@ void DebugArea::askDebugMode(bool askDetail){
 }
 void DebugArea::confirmDebugMode(){
     bool isDebugModeOn = DebugArea::getDebugMode();
+    std::vector<bool> opArray;
+    std::vector<bool> clArray;
+    std::vector<bool> icArray;
     if(!isDebugModeOn){
         std::array<bool, 5> mainArray;
         std::fill(mainArray.begin(),mainArray.end(),false);
         DebugArea::debugCategory.swap(mainArray);
-        std::vector<bool> opArray;
+
         opArray.resize(operationDebugCategory.size());
         std::fill(opArray.begin(),opArray.end(),false);
         DebugArea::operationDebugCategory.swap(opArray);
-        std::vector<bool> clArray;
+
         clArray.resize(calcLogicDebugCategory.size());
         std::fill(clArray.begin(),clArray.end(),false);
         DebugArea::calcLogicDebugCategory.swap(clArray);
+
+        icArray.resize(inputCleanerDebugCategory.size());
+        std::fill(icArray.begin(), icArray.end(), false);
+        DebugArea::inputCleanerDebugCategory.swap(icArray);
     } else {
         bool isCategorySelected = std::find(DebugArea::debugCategory.begin(), DebugArea::debugCategory.end(), true) != DebugArea::debugCategory.end();
         bool isOperationCategorySelected = std::find(DebugArea::operationDebugCategory.begin(), DebugArea::operationDebugCategory.end(), true) != DebugArea::operationDebugCategory.end();
         bool isCalcLogicCategorySelected = std::find(DebugArea::calcLogicDebugCategory.begin(), DebugArea::calcLogicDebugCategory.end(), true) != DebugArea::calcLogicDebugCategory.end();
-        bool isSubCategorySelected = isOperationCategorySelected || isCalcLogicCategorySelected;
-        bool isAnySelected = isCategorySelected || isOperationCategorySelected || isCalcLogicCategorySelected;
+        bool isInputCleanerCategorySelected = std::find(DebugArea::inputCleanerDebugCategory.begin(), DebugArea::inputCleanerDebugCategory.end(), true) != DebugArea::inputCleanerDebugCategory.end();
+        bool isSubCategorySelected = isOperationCategorySelected || isCalcLogicCategorySelected || isInputCleanerCategorySelected;
+        bool isAnySelected = isCategorySelected || isSubCategorySelected;
         if(!isAnySelected){
             std::array<bool,5> mainArray;
             std::fill(mainArray.begin(),mainArray.end(),true);
             DebugArea::debugCategory.swap(mainArray);
-            std::vector<bool> opArray;
+
             opArray.resize(operationDebugCategory.size());
             std::fill(opArray.begin(),opArray.end(),true);
             DebugArea::operationDebugCategory.swap(opArray);
-            std::vector<bool> clArray;
+
             clArray.resize(calcLogicDebugCategory.size());
             std::fill(clArray.begin(),clArray.end(),true);
             DebugArea::calcLogicDebugCategory.swap(clArray);
+
+            icArray.resize(inputCleanerDebugCategory.size());
+            std::fill(icArray.begin(),icArray.end(),true);
+            DebugArea::inputCleanerDebugCategory.swap(icArray);
         } else {
             if(!isSubCategorySelected){
                 for(int i = 0; i < DebugArea::debugCategory.size(); i++){
                     if(DebugArea::debugCategory[i] == true){
-                        std::vector<bool> opArray;
-                        std::vector<bool> clArray;
                         switch(i){
                         case static_cast<uint8_t>(DebugSources::Operation):
                             std::fill(opArray.begin(),opArray.end(),true);
@@ -270,6 +296,10 @@ void DebugArea::confirmDebugMode(){
                         case static_cast<uint8_t>(DebugSources::CalcLogic):
                             std::fill(clArray.begin(),clArray.end(),true);
                             DebugArea::calcLogicDebugCategory.swap(clArray);
+                            break;
+                        case static_cast<uint8_t>(DebugSources::InputCleaner):
+                            std::fill(icArray.begin(), icArray.end(), true);
+                            DebugArea::inputCleanerDebugCategory.swap(icArray);
                             break;
                         }
                     }

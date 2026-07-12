@@ -79,7 +79,7 @@ testInit:
         int testOp = CT.getTestOps();
         int testPhase = CT.getTestNum();
         int testType = CT.getTestType();
-        std::array<std::string, 5> testArray;
+        std::array<std::string, 10> testArray;
         if(testType == 0){
             testArray = CT.simpleIntegerOperationTestCases(testOp);
         }
@@ -132,7 +132,7 @@ testInit:
         int testType = CT.getTestType();
         std::string testResult = calcFlg2[0];
         if(testType == 0){
-            std::array<int, 5> answerArray = CT.simpleIntegerOperationTestAnswer(testOp);
+            std::array<int, 10> answerArray = CT.simpleIntegerOperationTestAnswer(testOp);
             int expTestResult = answerArray[testPhase];
             int actualTestResult;
             if(testOp < 6){
@@ -146,7 +146,7 @@ testInit:
             CT.incrementTestNum();
             testPhase++;
             if(testPhase == answerArray.size()){
-                std::array<bool, 5> resultArray = CT.getSimpleResultTempArray();
+                std::array<bool, 10> resultArray = CT.getSimpleResultTempArray();
                 bool hasNegative = false;
                 for(const bool& elem: resultArray){
                     if(!elem){

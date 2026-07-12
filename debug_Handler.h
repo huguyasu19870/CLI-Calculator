@@ -19,6 +19,9 @@ enum class OperationDebugTarget : uint8_t{
     Factorial = 0,
     Exponent = 1
 };
+enum class InputCleanerDebugTarget : uint8_t{
+    EndSplit = 0
+};
 enum class CalcLogicDebugTarget : uint8_t{
     CalcLogicInput = 0,
     FactorialLoopBegin = 1,
@@ -41,20 +44,22 @@ public:
         debugMode = false;
     }
     void confirmDebugMode();
+    bool checkDebugMode();
     void askDebugMode(bool askDetail);
     void selectDebugMode(DebugSources input, bool mode);
     void operationDebugMode(OperationDebugTarget input, bool mode);
+    void inputCleanerDebugMode(InputCleanerDebugTarget input, bool mode);
     void calcLogicDebugMode(CalcLogicDebugTarget input, bool mode);
     bool getDebugMode(){
         return debugMode;
-    }
+    };
     std::array<std::vector<bool>, 5> getTotalList (){
         return totalList;
     }
     std::array<std::string,5> InvDebugSources = {"Main", "Operation","InputCleaner","CalcLogic","TestProgram"};
     std::vector<std::string> InvMainSources = {"Null"};
     std::vector<std::string> InvOperationDebugTarget = {"Factorial","Exponent"};
-    std::vector<std::string> InvInputCleanerDebugTarget = {"Null"};
+    std::vector<std::string> InvInputCleanerDebugTarget = {"EndSplit"};
     std::vector<std::string> InvCalcLogicDebugTarget = {"CalcLogicInput","FactorialLoopBegin","FactorialLoopInput","ExponentLoopBegin","ExponentLoopInput","MulDivLoopBegin","MulDivLoopInput","AddSubLoopBegin","AddSubLoopInput","CalcLoopEnd"};
     std::vector<std::string> InvTestCalcDebugTarget = {"Null"};
     std::array<std::vector<std::string>,5> InvDebugTargetList = {InvMainSources, InvOperationDebugTarget, InvInputCleanerDebugTarget,InvCalcLogicDebugTarget,InvTestCalcDebugTarget};
@@ -63,7 +68,7 @@ private:
     inline static bool debugMode = false;
     inline static std::vector<bool> mainDebugCategory;
     inline static std::vector<bool> operationDebugCategory = {false, false};
-    inline static std::vector<bool> inputCleanerDebugCategory;
+    inline static std::vector<bool> inputCleanerDebugCategory = {false};
     inline static std::vector<bool> calcLogicDebugCategory = {false, false, false, false, false, false, false, false, false, false};
     inline static std::vector<bool> testProgramDebugCategory;
     inline static std::array<std::vector<bool>, 5> totalList = {mainDebugCategory, operationDebugCategory, inputCleanerDebugCategory, calcLogicDebugCategory, testProgramDebugCategory};
